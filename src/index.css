@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Fraunces:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-body);
+  --font-serif: var(--font-heading);
+  
+  --color-cinema-dark: var(--bg-color);
+  --color-cinema-black: var(--surface-color);
+  --color-cinema-red: var(--accent-color);
+  --color-cinema-red-light: var(--accent-light-color);
+  
+  /* Map standard tailwind grays to theme tokens so standard UI uses them seamlessly */
+  --color-gray-200: var(--text-color);
+  --color-gray-300: color-mix(in srgb, var(--text-color) 80%, transparent);
+  --color-gray-400: var(--text-muted);
+  --color-gray-500: color-mix(in srgb, var(--text-muted) 80%, transparent);
+  --color-gray-600: color-mix(in srgb, var(--border-color) 150%, white 20%);
+  --color-gray-700: color-mix(in srgb, var(--border-color) 120%, white 10%);
+  --color-gray-800: var(--border-color);
+  --color-gray-900: color-mix(in srgb, var(--surface-color) 80%, white 5%);
+
+  /* Dynamically map radii */
+  --radius-sm: var(--radius-custom);
+  --radius-md: calc(var(--radius-custom) * 1.5);
+  --radius-lg: calc(var(--radius-custom) * 2);
+  --radius-xl: calc(var(--radius-custom) * 3);
+  --radius: var(--radius-custom);
+}
+
+:root {
+  /* Fallbacks for initial render */
+  --bg-color: #0a0303;
+  --surface-color: #030101;
+  --accent-color: #8a0303;
+  --accent-light-color: #c20606;
+  --text-color: #e5e7eb;
+  --text-muted: #9ca3af;
+  --border-color: #1f2937;
+  --radius-custom: 0.125rem;
+  --typo-scale: 1;
+  --spacing-scale: 1;
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --grain-intensity: 0.05;
+  --overlay-intensity: 0.9;
+}
+
+html {
+  font-size: calc(16px * var(--typo-scale));
+}
+
+html, body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+/* Dynamic Button Styles */
+.btn-primary {
+  border-radius: var(--radius-custom);
+  border-width: 1px;
+}
+body[data-button-style="solid"] .btn-primary {
+  background-color: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+body[data-button-style="solid"] .btn-primary:hover {
+  background-color: var(--accent-light-color);
+  border-color: var(--accent-light-color);
+}
+body[data-button-style="outline"] .btn-primary {
+  background-color: transparent;
+  color: var(--text-color);
+  border-color: var(--accent-color);
+}
+body[data-button-style="outline"] .btn-primary:hover {
+  background-color: var(--accent-color);
+  color: white;
+}
+body[data-button-style="ghost"] .btn-primary {
+  background-color: transparent;
+  color: var(--accent-color);
+  border-color: transparent;
+}
+body[data-button-style="ghost"] .btn-primary:hover {
+  background-color: color-mix(in srgb, var(--accent-color) 10%, transparent);
+}
+
+/* Accessibility Focus States */
+*:focus-visible {
+  outline: 2px solid var(--accent-light-color);
+  outline-offset: 4px;
+}
