@@ -63,4 +63,5 @@ export interface PageSection {
   isHidden: boolean;
   projectSelection: ProjectSelection;
   order: number;
+  showreelUrl?: string;
 }
