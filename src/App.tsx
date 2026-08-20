@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Home from './pages/Home';
 import Work from './pages/Work';
@@ -48,7 +48,7 @@ export default function App() {
       <ThemeProvider>
         <ProjectProvider>
           <SectionProvider>
-            <BrowserRouter>
+            <HashRouter>
               <ScrollToTop />
               <Routes>
                 {/* Public Routes */}
@@ -72,7 +72,7 @@ export default function App() {
                   <Route path="*" element={<AdminDashboard />} />
                 </Route>
               </Routes>
-            </BrowserRouter>
+            </HashRouter>
           </SectionProvider>
         </ProjectProvider>
       </ThemeProvider>
