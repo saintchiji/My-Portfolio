@@ -6,11 +6,8 @@ import {defineConfig} from 'vite';
 export default defineConfig(() => {
   // If deployed to GitHub Pages via GitHub Actions, the GITHUB_REPOSITORY env var
   // will be populated (e.g. "username/repo-name"). We extract "repo-name" for the base path.
-  const githubRepo = process.env.GITHUB_REPOSITORY;
-  const basePath = githubRepo ? `/${githubRepo.split('/')[1]}/` : './';
-
   return {
-    base: basePath,
+    base: './',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {

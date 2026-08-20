@@ -12,6 +12,27 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Fallback script to help diagnose white page issues on GitHub Pages
+      setTimeout(() => {
+        const root = document.getElementById('root');
+        if (root && root.innerHTML.trim() === '') {
+          root.innerHTML = `
+            <div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; border: 1px solid #ffb8b8; border-radius: 8px; background: #fff5f5; color: #d00;">
+              <h2 style="margin-top:0;">Build Configuration Issue Detected</h2>
+              <p>If you are seeing this message on GitHub Pages, it means your site is serving the raw, unbuilt source code instead of the compiled website.</p>
+              <p><strong>To fix this on GitHub:</strong></p>
+              <ol style="line-height: 1.6;">
+                <li>Go to your repository <strong>Settings</strong></li>
+                <li>Click on <strong>Pages</strong> in the left sidebar</li>
+                <li>Under "Build and deployment", change the <strong>Source</strong> dropdown to <strong>GitHub Actions</strong></li>
+              </ol>
+              <p>Once you change that setting, GitHub will automatically build your app and this message will be replaced by your real website in a few minutes.</p>
+            </div>
+          `;
+        }
+      }, 3000);
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
