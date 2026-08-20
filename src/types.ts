@@ -1,10 +1,41 @@
-export type VideoProvider = 'youtube' | 'vimeo' | 'direct';
+export type VideoProvider = 'youtube' | 'vimeo' | 'direct' | 'google_drive';
 
 export interface VideoInfo {
   url: string;
   provider: VideoProvider;
   previewUrl?: string;
+  googleDriveFileId?: string;
 }
+
+export type MediaSourceType = 'direct' | 'google_drive' | 'youtube' | 'vimeo' | 'external';
+export type MediaType = 'video' | 'image' | 'logo';
+
+export interface MediaAsset {
+  id: string;
+  name: string;
+  type: MediaType;
+  source: MediaSourceType;
+  size?: number;
+  dateUploaded: string;
+  url: string; // Resolvable URL (or blob ID placeholder)
+  googleDriveFileId?: string;
+  originalUrl?: string;
+}
+
+export interface BrandingConfig {
+  primaryLogo?: string;
+  darkLogo?: string;
+  lightLogo?: string;
+  mobileLogo?: string;
+  footerLogo?: string;
+  logoMark?: string;
+  favicon?: string;
+  logoMode: 'image' | 'text' | 'mark' | 'none';
+  logoWidth: number;
+  mobileLogoWidth: number;
+  footerLogoWidth: number;
+}
+
 
 export interface Project {
   id: string;

@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode } from 'react';
 import { PageSection } from '../types';
+import { useDatabase } from './DatabaseContext';
 
 interface SectionContextType {
   sections: PageSection[];
@@ -64,21 +65,9 @@ const initialSections: PageSection[] = [
 const SectionContext = createContext<SectionContextType | undefined>(undefined);
 
 export function SectionProvider({ children }: { children: ReactNode }) {
-  const [sections, setSections] = useState<PageSection[]>(() => {
-    const saved = localStorage.getItem('cinematic-portfolio-sections-v2');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error('Failed to parse saved sections', e);
-      }
-    }
-    return initialSections;
-  });
-
-  useEffect(() => {
-    localStorage.setItem('cinematic-portfolio-sections-v2', JSON.stringify(sections));
-  }, [sections]);
+  const { activeConfig, updateDraft } = useDatabase();
+  
+  const sections = activeConfig?.sections || initialSections;
 
   const addSection = (sectionData: Omit<PageSection, 'id' | 'order'>) => {
     const newSection: PageSection = {
@@ -86,37 +75,35 @@ export function SectionProvider({ children }: { children: ReactNode }) {
       id: crypto.randomUUID(),
       order: sections.length,
     };
-    setSections(prev => [...prev, newSection]);
+    updateDraft('sections', [...sections, newSection]);
   };
 
   const updateSection = (id: string, updates: Partial<PageSection>) => {
-    setSections(prev => prev.map(s => s.id === id ? { ...s, ...updates } : s));
+    updateDraft('sections', sections.map(s => s.id === id ? { ...s, ...updates } : s));
   };
 
   const deleteSection = (id: string) => {
-    setSections(prev => prev.filter(s => s.id !== id));
+    updateDraft('sections', sections.filter(s => s.id !== id));
   };
 
   const duplicateSection = (id: string) => {
     const sectionToCopy = sections.find(s => s.id === id);
     if (!sectionToCopy) return;
-
     const newSection: PageSection = {
       ...sectionToCopy,
       id: crypto.randomUUID(),
       title: `${sectionToCopy.title} (Copy)`,
       order: sections.length,
     };
-    setSections(prev => [...prev, newSection]);
+    updateDraft('sections', [...sections, newSection]);
   };
 
   const reorderSections = (startIndex: number, endIndex: number) => {
-    setSections(prev => {
-      const result = Array.from(prev);
-      const [removed] = result.splice(startIndex, 1);
-      result.splice(endIndex, 0, removed);
-      return result.map((s, index) => ({ ...s, order: index }));
-    });
+    const result = Array.from(sections);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    const updated = result.map((s, index) => ({ ...s, order: index }));
+    updateDraft('sections', updated);
   };
 
   return (

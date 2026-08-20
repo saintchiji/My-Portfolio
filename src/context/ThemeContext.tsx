@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, ReactNode } from 'react';
 import { ThemeConfig } from '../types';
+import { useDatabase } from './DatabaseContext';
 
 export const defaultTheme: ThemeConfig = {
   bgColor: '#0a0303',
@@ -28,21 +29,11 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<ThemeConfig>(() => {
-    const saved = localStorage.getItem('cinematic-portfolio-theme');
-    if (saved) {
-      try {
-        return { ...defaultTheme, ...JSON.parse(saved) };
-      } catch (e) {
-        console.error('Failed to parse saved theme', e);
-      }
-    }
-    return defaultTheme;
-  });
+  const { activeConfig, updateDraft } = useDatabase();
+  
+  const theme = activeConfig?.theme ? { ...defaultTheme, ...activeConfig.theme } : defaultTheme;
 
   useEffect(() => {
-    localStorage.setItem('cinematic-portfolio-theme', JSON.stringify(theme));
-    
     // Apply CSS Variables to :root
     const root = document.documentElement;
     root.style.setProperty('--bg-color', theme.bgColor);
@@ -65,11 +56,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, [theme]);
 
   const updateTheme = (updates: Partial<ThemeConfig>) => {
-    setTheme(prev => ({ ...prev, ...updates }));
+    updateDraft('theme', { ...theme, ...updates });
   };
 
   const resetTheme = () => {
-    setTheme(defaultTheme);
+    updateDraft('theme', defaultTheme);
   };
 
   return (

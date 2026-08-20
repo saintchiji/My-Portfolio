@@ -3,12 +3,15 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link, useLocation } from 'react-router-dom';
 import { useContent } from '../context/ContentContext';
+import { useBranding } from '../context/BrandingContext';
+import MediaImage from './MediaImage';
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const { content } = useContent();
+  const { branding } = useBranding();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,6 +37,46 @@ export default function Navigation() {
     .filter(link => link.isVisible)
     .sort((a, b) => a.order - b.order);
 
+  const renderLogo = () => {
+    if (branding.logoMode === 'none') return null;
+    
+    if (branding.logoMode === 'image' && branding.primaryLogo) {
+      return (
+        <MediaImage 
+          src={branding.primaryLogo} 
+          alt={content.branding.logoText} 
+          style={{ width: `${branding.logoWidth}px` }}
+          className="object-contain md:block hidden" 
+        />
+      );
+    }
+    
+    // Splitting logic for VXN style text logo
+    return content.branding.logoText.length > 2 ? (
+      <>{content.branding.logoText.slice(0, 1)}<span className="text-cinema-red">{content.branding.logoText.slice(1, 2)}</span>{content.branding.logoText.slice(2)}</>
+    ) : content.branding.logoText;
+  };
+
+  const renderMobileLogo = () => {
+    if (branding.logoMode === 'none') return null;
+    
+    if (branding.logoMode === 'image' && branding.mobileLogo) {
+      return (
+        <MediaImage 
+          src={branding.mobileLogo} 
+          alt={content.branding.logoText} 
+          style={{ width: `${branding.mobileLogoWidth}px` }}
+          className="object-contain block md:hidden" 
+        />
+      );
+    }
+    
+    // Splitting logic for VXN style text logo
+    return content.branding.logoText.length > 2 ? (
+      <>{content.branding.logoText.slice(0, 1)}<span className="text-cinema-red">{content.branding.logoText.slice(1, 2)}</span>{content.branding.logoText.slice(2)}</>
+    ) : content.branding.logoText;
+  };
+
   return (
     <>
       <nav 
@@ -50,14 +93,21 @@ export default function Navigation() {
             className="font-serif text-2xl tracking-widest text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cinema-red focus-visible:ring-offset-4 focus-visible:ring-offset-cinema-dark rounded"
             aria-label={`${content.branding.logoText} Home`}
           >
-            {content.branding.logoImage ? (
-              <img src={content.branding.logoImage} alt={content.branding.logoText} className="h-8 object-contain" />
-            ) : (
-              // Splitting logic for VXN style
-              content.branding.logoText.length > 2 ? (
-                 <>{content.branding.logoText.slice(0, 1)}<span className="text-cinema-red">{content.branding.logoText.slice(1, 2)}</span>{content.branding.logoText.slice(2)}</>
-              ) : content.branding.logoText
-            )}
+            {branding.logoMode === 'image' ? (
+              <>
+                {branding.primaryLogo && (
+                  <div className="hidden md:block">
+                    <MediaImage src={branding.primaryLogo} alt="Logo" style={{ width: `${branding.logoWidth}px` }} className="object-contain" />
+                  </div>
+                )}
+                {branding.mobileLogo && (
+                  <div className="md:hidden block">
+                    <MediaImage src={branding.mobileLogo} alt="Logo" style={{ width: `${branding.mobileLogoWidth}px` }} className="object-contain" />
+                  </div>
+                )}
+                {(!branding.primaryLogo && !branding.mobileLogo) && renderLogo()}
+              </>
+            ) : renderLogo()}
           </Link>
 
           {/* Desktop Nav */}

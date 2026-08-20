@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useEffect } from 'react';
+import { useDatabase } from './DatabaseContext';
 
 export interface SocialLink {
   id: string;
@@ -164,34 +165,26 @@ interface ContentContextType {
 const ContentContext = createContext<ContentContextType | undefined>(undefined);
 
 export function ContentProvider({ children }: { children: ReactNode }) {
-  const [content, setContent] = useState<SiteContent>(() => {
-    const saved = localStorage.getItem('cinematic-portfolio-content');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error('Failed to parse saved content', e);
-      }
-    }
-    return initialContent;
-  });
+  const { activeConfig, updateDraft } = useDatabase();
+  
+  const content = activeConfig?.content ? { ...initialContent, ...activeConfig.content } : initialContent;
 
   useEffect(() => {
-    localStorage.setItem('cinematic-portfolio-content', JSON.stringify(content));
-  }, [content]);
+    document.title = content.branding.logoText || 'Portfolio';
+  }, [content.branding.logoText]);
 
   const updateContent = (updates: Partial<SiteContent>) => {
-    setContent(prev => ({ ...prev, ...updates }));
+    updateDraft('content', { ...content, ...updates });
   };
 
   const updateNestedContent = (key: keyof SiteContent, nestedKey: string, value: any) => {
-    setContent(prev => ({
-      ...prev,
+    updateDraft('content', {
+      ...content,
       [key]: {
-        ...(prev[key] as any),
+        ...(content[key] as any),
         [nestedKey]: value
       }
-    }));
+    });
   };
 
   return (

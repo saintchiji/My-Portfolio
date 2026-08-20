@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { Project, PortfolioLayout } from '../types';
 import { motion } from 'motion/react';
 import { useRef, useState } from 'react';
+import MediaImage from './MediaImage';
+import MediaVideo from './MediaVideo';
 
 interface ProjectCardProps {
   project: Project;
@@ -51,7 +53,7 @@ export default function ProjectCard({ project, index, layout = 'cinematic-grid',
         <div className={`relative w-full h-full ${aspectClass} overflow-hidden`}>
           
           {/* Static Image Layer */}
-          <img 
+          <MediaImage 
             src={project.imageUrl} 
             alt={`Thumbnail for ${project.title}`} 
             loading="lazy"
@@ -60,7 +62,7 @@ export default function ProjectCard({ project, index, layout = 'cinematic-grid',
 
           {/* Hover Video Preview Layer */}
           {project.video.previewUrl && (
-            <video
+            <MediaVideo
               ref={videoRef}
               src={project.video.previewUrl}
               muted

@@ -1,6 +1,8 @@
 import ReactPlayer from 'react-player';
 import { Play } from 'lucide-react';
 import { VideoInfo } from '../types';
+import { useMedia } from '../context/MediaContext';
+import { useState, useEffect } from 'react';
 
 const Player = ReactPlayer as any;
 
@@ -12,6 +14,21 @@ interface VideoPlayerProps {
 }
 
 export default function VideoPlayer({ video, poster, autoPlay = false, className = '' }: VideoPlayerProps) {
+  const { resolveMediaUrl } = useMedia();
+  const [resolvedUrl, setResolvedUrl] = useState(video?.url);
+
+  useEffect(() => {
+    let mounted = true;
+    if (video?.url?.startsWith('idb://')) {
+      resolveMediaUrl(video.url).then(url => {
+        if (mounted) setResolvedUrl(url);
+      });
+    } else {
+      setResolvedUrl(video?.url);
+    }
+    return () => { mounted = false; };
+  }, [video?.url, resolveMediaUrl]);
+
   // Empty state handling
   if (!video || !video.url) {
     return (
@@ -24,10 +41,23 @@ export default function VideoPlayer({ video, poster, autoPlay = false, className
     );
   }
 
+  if (video.provider === 'google_drive' && video.googleDriveFileId) {
+    return (
+      <div className={`relative w-full aspect-[16/9] bg-cinema-black overflow-hidden group ${className}`}>
+        <iframe 
+          src={`https://drive.google.com/file/d/${video.googleDriveFileId}/preview`} 
+          className="w-full h-full border-0"
+          allow="autoplay; fullscreen"
+          title="Google Drive Video"
+        />
+      </div>
+    );
+  }
+
   return (
     <div className={`relative w-full aspect-[16/9] bg-cinema-black overflow-hidden group ${className}`}>
       <Player
-        url={video.url}
+        url={resolvedUrl}
         width="100%"
         height="100%"
         playing={autoPlay}

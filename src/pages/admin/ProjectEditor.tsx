@@ -3,6 +3,12 @@ import { useProjects } from '../../context/ProjectContext';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Save, Trash2 } from 'lucide-react';
 import { Project, VideoProvider } from '../../types';
+import MediaSelector from '../../components/admin/MediaSelector';
+
+function parseGoogleDriveUrl(url: string) {
+  const match = url.match(/[-\w]{25,}/);
+  return match ? match[0] : undefined;
+}
 
 export default function ProjectEditor() {
   const { id } = useParams();
@@ -165,10 +171,14 @@ export default function ProjectEditor() {
           
           <div className="space-y-2">
             <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Thumbnail Image URL</label>
-            <input required type="url" name="imageUrl" value={formData.imageUrl} onChange={handleChange} placeholder="https://..." className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none transition-colors" />
+            <MediaSelector 
+              type="image" 
+              value={formData.imageUrl} 
+              onChange={val => setFormData(prev => ({ ...prev, imageUrl: val }))} 
+            />
             {formData.imageUrl && (
               <div className="mt-2 w-32 h-20 rounded bg-gray-800 overflow-hidden border border-gray-700">
-                <img src={formData.imageUrl} alt="Preview" className="w-full h-full object-cover" />
+                <img src={formData.imageUrl.startsWith('idb://') ? '#' : formData.imageUrl} alt="Preview" className="w-full h-full object-cover" />
               </div>
             )}
           </div>
@@ -179,18 +189,38 @@ export default function ProjectEditor() {
               <select name="video.provider" value={formData.video.provider} onChange={handleChange} className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none transition-colors">
                 <option value="vimeo">Vimeo</option>
                 <option value="youtube">YouTube</option>
-                <option value="direct">Direct URL (MP4)</option>
+                <option value="google_drive">Google Drive</option>
+                <option value="direct">Direct Upload / MP4 URL</option>
               </select>
             </div>
             <div className="space-y-2">
               <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Main Video URL</label>
-              <input required type="url" name="video.url" value={formData.video.url} onChange={handleChange} placeholder="https://..." className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none transition-colors" />
+              <MediaSelector 
+                type="video" 
+                value={formData.video.url} 
+                onChange={(val) => {
+                  const isGoogleDrive = val.includes('drive.google.com') || val.includes('docs.google.com');
+                  setFormData(prev => ({
+                    ...prev,
+                    video: {
+                      ...prev.video,
+                      url: val,
+                      provider: isGoogleDrive ? 'google_drive' : prev.video.provider,
+                      googleDriveFileId: isGoogleDrive ? parseGoogleDriveUrl(val) : prev.video.googleDriveFileId
+                    }
+                  }));
+                }} 
+              />
             </div>
           </div>
 
           <div className="space-y-2">
             <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Hover Preview MP4 URL (Optional)</label>
-            <input type="url" name="video.previewUrl" value={formData.video.previewUrl || ''} onChange={handleChange} placeholder="https://..." className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none transition-colors" />
+            <MediaSelector 
+              type="video" 
+              value={formData.video.previewUrl || ''} 
+              onChange={val => setFormData(prev => ({ ...prev, video: { ...prev.video, previewUrl: val } }))} 
+            />
             <p className="text-[10px] text-gray-500">A short, silent, looping MP4 file used when users hover over the project card.</p>
           </div>
         </div>

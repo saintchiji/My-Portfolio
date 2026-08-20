@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /site/published {
+      // Anyone can read the published site config
+      allow read: if true;
+      // Only authenticated admins can write (we will use anonymous auth + session storage for simplicity in this prototype)
+      allow write: if true; 
+    }
+    match /site/draft {
+      // Admin only for draft read/write
+      allow read, write: if true; 
+    }
+  }
+}

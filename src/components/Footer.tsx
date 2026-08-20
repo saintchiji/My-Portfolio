@@ -1,6 +1,8 @@
 import { motion } from 'motion/react';
 import { Mail, Instagram, Twitter, Video, Youtube, Linkedin, Facebook } from 'lucide-react';
 import { useContent } from '../context/ContentContext';
+import { useBranding } from '../context/BrandingContext';
+import MediaImage from './MediaImage';
 
 const IconMap: Record<string, any> = {
   'Instagram': Instagram,
@@ -13,6 +15,7 @@ const IconMap: Record<string, any> = {
 
 export default function Footer() {
   const { content } = useContent();
+  const { branding } = useBranding();
   const socialLinks = content.socialLinks.filter(l => l.isVisible);
 
   return (
@@ -56,7 +59,17 @@ export default function Footer() {
         </div>
         
         <div className="mt-24 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs tracking-widest uppercase">
-          <p>&copy; {new Date().getFullYear()} {content.branding.logoText}.</p>
+          <div className="flex items-center gap-4">
+            {(branding.logoMode === 'image' && branding.footerLogo) ? (
+              <MediaImage 
+                src={branding.footerLogo} 
+                alt="Footer Logo" 
+                style={{ width: `${branding.footerLogoWidth}px` }}
+                className="object-contain" 
+              />
+            ) : null}
+            <p>&copy; {new Date().getFullYear()} {content.branding.logoText}.</p>
+          </div>
           <p>All Rights Reserved.</p>
         </div>
       </div>

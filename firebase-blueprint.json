@@ -1,0 +1,33 @@
+{
+  "collections": {
+    "site": {
+      "description": "Singleton documents representing the entire site configuration to ensure atomic publishing.",
+      "documents": {
+        "draft": {
+          "description": "The current working draft of the site, editable by admins.",
+          "fields": {
+            "projects": "array",
+            "sections": "array",
+            "theme": "object",
+            "content": "object",
+            "branding": "object",
+            "media": "array",
+            "updatedAt": "timestamp"
+          }
+        },
+        "published": {
+          "description": "The live configuration served to public visitors.",
+          "fields": {
+            "projects": "array",
+            "sections": "array",
+            "theme": "object",
+            "content": "object",
+            "branding": "object",
+            "media": "array",
+            "updatedAt": "timestamp"
+          }
+        }
+      }
+    }
+  }
+}

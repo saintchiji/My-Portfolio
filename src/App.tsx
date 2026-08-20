@@ -13,10 +13,13 @@ import Contact from './pages/Contact';
 import ProjectDetail from './pages/ProjectDetail';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import { DatabaseProvider } from './context/DatabaseContext';
 import { ProjectProvider } from './context/ProjectContext';
 import { SectionProvider } from './context/SectionContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { ContentProvider } from './context/ContentContext';
+import { MediaProvider } from './context/MediaContext';
+import { BrandingProvider } from './context/BrandingContext';
 import AdminLayout from './components/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import ProjectList from './pages/admin/ProjectList';
@@ -24,6 +27,8 @@ import ProjectEditor from './pages/admin/ProjectEditor';
 import SectionBuilder from './pages/admin/SectionBuilder';
 import ThemeEditor from './pages/admin/ThemeEditor';
 import ContentEditor from './pages/admin/ContentEditor';
+import MediaLibrary from './pages/admin/MediaLibrary';
+import BrandingEditor from './pages/admin/BrandingEditor';
 
 // A wrapper to hide standard Nav/Footer for Admin routes
 function MainLayout({ children }: { children: React.ReactNode }) {
@@ -44,38 +49,46 @@ function MainLayout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <ContentProvider>
-      <ThemeProvider>
-        <ProjectProvider>
-          <SectionProvider>
-            <HashRouter>
-              <ScrollToTop />
-              <Routes>
-                {/* Public Routes */}
-                <Route path="/" element={<MainLayout><Home /></MainLayout>} />
-                <Route path="/work" element={<MainLayout><Work /></MainLayout>} />
-                <Route path="/work/:category" element={<MainLayout><Work /></MainLayout>} />
-                <Route path="/about" element={<MainLayout><About /></MainLayout>} />
-                <Route path="/services" element={<MainLayout><Services /></MainLayout>} />
-                <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
-                <Route path="/project/:id" element={<MainLayout><ProjectDetail /></MainLayout>} />
-                
-                {/* Admin Routes */}
-                <Route path="/admin" element={<AdminLayout />}>
-                  <Route index element={<AdminDashboard />} />
-                  <Route path="projects" element={<ProjectList />} />
-                  <Route path="projects/:id" element={<ProjectEditor />} />
-                  <Route path="sections" element={<SectionBuilder />} />
-                  <Route path="theme" element={<ThemeEditor />} />
-                  <Route path="content" element={<ContentEditor />} />
-                  {/* Stub other routes to AdminDashboard for now */}
-                  <Route path="*" element={<AdminDashboard />} />
-                </Route>
-              </Routes>
-            </HashRouter>
-          </SectionProvider>
-        </ProjectProvider>
-      </ThemeProvider>
-    </ContentProvider>
+    <HashRouter>
+      <DatabaseProvider>
+        <MediaProvider>
+          <BrandingProvider>
+            <ContentProvider>
+              <ThemeProvider>
+                <ProjectProvider>
+                  <SectionProvider>
+                    <ScrollToTop />
+                    <Routes>
+                      {/* Public Routes */}
+                      <Route path="/" element={<MainLayout><Home /></MainLayout>} />
+                      <Route path="/work" element={<MainLayout><Work /></MainLayout>} />
+                      <Route path="/work/:category" element={<MainLayout><Work /></MainLayout>} />
+                      <Route path="/about" element={<MainLayout><About /></MainLayout>} />
+                      <Route path="/services" element={<MainLayout><Services /></MainLayout>} />
+                      <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
+                      <Route path="/project/:id" element={<MainLayout><ProjectDetail /></MainLayout>} />
+                      
+                      {/* Admin Routes */}
+                      <Route path="/admin" element={<AdminLayout />}>
+                        <Route index element={<AdminDashboard />} />
+                        <Route path="projects" element={<ProjectList />} />
+                        <Route path="projects/:id" element={<ProjectEditor />} />
+                        <Route path="sections" element={<SectionBuilder />} />
+                        <Route path="theme" element={<ThemeEditor />} />
+                        <Route path="content" element={<ContentEditor />} />
+                        <Route path="media" element={<MediaLibrary />} />
+                        <Route path="branding" element={<BrandingEditor />} />
+                        {/* Stub other routes to AdminDashboard for now */}
+                        <Route path="*" element={<AdminDashboard />} />
+                      </Route>
+                    </Routes>
+                  </SectionProvider>
+                </ProjectProvider>
+              </ThemeProvider>
+            </ContentProvider>
+          </BrandingProvider>
+        </MediaProvider>
+      </DatabaseProvider>
+    </HashRouter>
   );
 }
