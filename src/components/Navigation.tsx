@@ -61,7 +61,7 @@ export default function Navigation() {
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex gap-10">
+          <div className="hidden md:flex gap-10 items-center">
             {navLinks.map((link) => (
               <Link 
                 key={link.id} 
@@ -75,6 +75,16 @@ export default function Navigation() {
                 {link.label}
               </Link>
             ))}
+            <Link 
+              to="/admin"
+              className={`uppercase tracking-widest text-xs font-medium transition-colors focus:outline-none focus-visible:text-white focus-visible:ring-2 focus-visible:ring-cinema-red rounded px-1 ${
+                location.pathname.startsWith('/admin')
+                  ? 'text-white border-b-2 border-cinema-red pb-1' 
+                  : 'text-gray-500 hover:text-cinema-red'
+              }`}
+            >
+              Admin
+            </Link>
           </div>
 
           {/* Mobile Nav Toggle */}
@@ -127,6 +137,21 @@ export default function Navigation() {
                   </Link>
                 </motion.div>
               ))}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: navLinks.length * 0.1 + 0.2 }}
+              >
+                <Link
+                  to="/admin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`font-serif text-4xl hover:text-cinema-red transition-colors focus:outline-none focus-visible:text-cinema-red ${
+                    location.pathname.startsWith('/admin') ? 'text-cinema-red' : 'text-gray-500'
+                  }`}
+                >
+                  Admin
+                </Link>
+              </motion.div>
             </div>
           </motion.div>
         )}
