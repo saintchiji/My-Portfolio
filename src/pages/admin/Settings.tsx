@@ -40,42 +40,111 @@ export default function Settings() {
 
       <div className="mt-8">
         {activeTab === 'general' && (
-          <div className="bg-cinema-black border border-gray-800 p-8 rounded-lg space-y-6 max-w-xl">
-            <div>
-              <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Headline (Contact)</label>
-              <input 
-                type="text" 
-                value={content.contact.headline}
-                onChange={e => updateNestedContent('contact', 'headline', e.target.value)}
-                className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-3 text-white focus:border-cinema-red outline-none"
-              />
+          <div className="bg-cinema-black border border-gray-800 p-8 rounded-lg space-y-12 max-w-3xl">
+            <div className="space-y-6">
+              <h3 className="text-xl font-serif text-white border-b border-gray-800 pb-2 mb-6">Contact Information</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Headline (Contact)</label>
+                  <input 
+                    type="text" 
+                    value={content.contact.headline}
+                    onChange={e => updateNestedContent('contact', 'headline', e.target.value)}
+                    className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-3 text-white focus:border-cinema-red outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Email</label>
+                  <input 
+                    type="email" 
+                    value={content.contact.email}
+                    onChange={e => updateNestedContent('contact', 'email', e.target.value)}
+                    className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-3 text-white focus:border-cinema-red outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Location</label>
+                  <input 
+                    type="text" 
+                    value={content.contact.location}
+                    onChange={e => updateNestedContent('contact', 'location', e.target.value)}
+                    className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-3 text-white focus:border-cinema-red outline-none"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Description (Contact)</label>
+                <textarea 
+                  rows={3}
+                  value={content.contact.description}
+                  onChange={e => updateNestedContent('contact', 'description', e.target.value)}
+                  className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-3 text-white focus:border-cinema-red outline-none resize-none"
+                />
+              </div>
             </div>
-            <div>
-              <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Description (Contact)</label>
-              <textarea 
-                rows={3}
-                value={content.contact.description}
-                onChange={e => updateNestedContent('contact', 'description', e.target.value)}
-                className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-3 text-white focus:border-cinema-red outline-none resize-none"
-              />
+            
+            <div className="space-y-6 pt-8 border-t border-gray-800">
+              <h3 className="text-xl font-serif text-white border-b border-gray-800 pb-2 mb-6">About Page Content</h3>
+              <div>
+                <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Headline</label>
+                <input 
+                  type="text" 
+                  value={content.about.headline}
+                  onChange={e => updateNestedContent('about', 'headline', e.target.value)}
+                  className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-3 text-white focus:border-cinema-red outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Philosophy Quote</label>
+                <input 
+                  type="text" 
+                  value={content.about.philosophy}
+                  onChange={e => updateNestedContent('about', 'philosophy', e.target.value)}
+                  className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-3 text-white focus:border-cinema-red outline-none text-center font-serif text-xl"
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Biography Paragraph 1</label>
+                  <textarea 
+                    rows={6}
+                    value={content.about.biography1}
+                    onChange={e => updateNestedContent('about', 'biography1', e.target.value)}
+                    className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-3 text-white focus:border-cinema-red outline-none resize-none leading-relaxed text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Biography Paragraph 2</label>
+                  <textarea 
+                    rows={6}
+                    value={content.about.biography2}
+                    onChange={e => updateNestedContent('about', 'biography2', e.target.value)}
+                    className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-3 text-white focus:border-cinema-red outline-none resize-none leading-relaxed text-sm"
+                  />
+                </div>
+              </div>
             </div>
-            <div>
-              <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Email</label>
-              <input 
-                type="email" 
-                value={content.contact.email}
-                onChange={e => updateNestedContent('contact', 'email', e.target.value)}
-                className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-3 text-white focus:border-cinema-red outline-none"
-              />
-            </div>
-            <div>
-              <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Location</label>
-              <input 
-                type="text" 
-                value={content.contact.location}
-                onChange={e => updateNestedContent('contact', 'location', e.target.value)}
-                className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-3 text-white focus:border-cinema-red outline-none"
-              />
+
+            <div className="space-y-6 pt-8 border-t border-gray-800">
+              <h3 className="text-xl font-serif text-white border-b border-gray-800 pb-2 mb-6">Services Page Content</h3>
+              <div>
+                <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Services Headline</label>
+                <input 
+                  type="text" 
+                  value={content.servicesPage.headline}
+                  onChange={e => updateNestedContent('servicesPage', 'headline', e.target.value)}
+                  className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-3 text-white focus:border-cinema-red outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Services Description</label>
+                <textarea 
+                  rows={3}
+                  value={content.servicesPage.description}
+                  onChange={e => updateNestedContent('servicesPage', 'description', e.target.value)}
+                  className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-3 text-white focus:border-cinema-red outline-none resize-none"
+                />
+              </div>
             </div>
           </div>
         )}

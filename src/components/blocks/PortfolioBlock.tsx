@@ -2,6 +2,7 @@ import { PageSection } from '../../types';
 import { useProjects } from '../../context/ProjectContext';
 import ProjectCard from '../ProjectCard';
 import { motion } from 'motion/react';
+import { Link } from 'react-router-dom';
 
 interface PortfolioBlockProps {
   section: PageSection;
@@ -17,6 +18,8 @@ export default function PortfolioBlock({ section }: PortfolioBlockProps) {
     sectionProjects = sectionProjects.filter(p => section.projectSelection.ids.includes(p.id));
     // Sort manually selected projects based on the order in the ids array
     sectionProjects.sort((a, b) => section.projectSelection.ids.indexOf(a.id) - section.projectSelection.ids.indexOf(b.id));
+  } else if (section.projectSelection.type === 'categories' && section.projectSelection.ids.length > 0) {
+    sectionProjects = sectionProjects.filter(p => section.projectSelection.ids.includes(p.category));
   }
 
   if (sectionProjects.length === 0) return null;
@@ -136,9 +139,9 @@ export default function PortfolioBlock({ section }: PortfolioBlockProps) {
         {/* Dynamic View All CTA */}
         {section.title.toLowerCase().includes('featured') || section.title.toLowerCase().includes('selected') ? (
           <div className="mt-16 md:mt-24 flex justify-center">
-            <a href="/work" className="btn-primary inline-flex items-center gap-2 px-8 py-4 uppercase tracking-widest text-xs font-semibold">
+            <Link to="/work" className="btn-primary inline-flex items-center gap-2 px-8 py-4 uppercase tracking-widest text-xs font-semibold">
               View All Work <span className="text-lg leading-none">&rarr;</span>
-            </a>
+            </Link>
           </div>
         ) : null}
       </div>

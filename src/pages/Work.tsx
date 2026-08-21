@@ -2,15 +2,28 @@ import { Link, useParams } from 'react-router-dom';
 import { motion } from 'motion/react';
 import ProjectCard from '../components/ProjectCard';
 import { useProjects } from '../context/ProjectContext';
+import { useSections } from '../context/SectionContext';
 
 export default function Work() {
   const { category } = useParams();
   const { projects } = useProjects();
+  const { sections } = useSections();
   
-  const publishedProjects = projects.filter(p => p.published);
+  // Find the Portfolio block to get category visibility settings
+  const portfolioSection = sections.find(s => s.type === 'portfolio');
+  const visibleCategories = portfolioSection?.projectSelection?.type === 'categories' 
+    ? portfolioSection.projectSelection.ids 
+    : ['All', 'Long-Form', 'Short-Form', 'Commercial', 'Wedding', 'Cinematography', 'Video Editing', 'Music Video', 'Documentary', 'Fashion'];
+  
+  let publishedProjects = projects.filter(p => p.published);
+
+  // Apply visibility rules
+  if (portfolioSection?.projectSelection?.type === 'categories') {
+    publishedProjects = publishedProjects.filter(p => visibleCategories.includes(p.category));
+  }
   
   // Get unique categories from published projects
-  const availableCategories = ['All', 'Featured', ...Array.from(new Set(publishedProjects.map(p => p.category)))];
+  let availableCategories = ['All', 'Featured', ...Array.from(new Set(publishedProjects.map(p => p.category)))];
 
   // Filter projects based on the current category param
   let displayedProjects = publishedProjects;

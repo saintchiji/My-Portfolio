@@ -50,10 +50,10 @@ export default function AboutPreviewBlock({ section }: AboutPreviewBlockProps) {
             className="md:col-span-7"
           >
             <p className="text-gray-300 text-lg md:text-xl font-light leading-relaxed mb-8">
-              {content.about.biography1}
+              {section.description}
             </p>
-            <Link to="/about" className="text-white hover:text-cinema-red uppercase tracking-widest text-xs font-bold transition-colors inline-flex items-center gap-2 border-b border-gray-700 hover:border-cinema-red pb-1">
-              Read About <ArrowRight className="w-4 h-4" />
+            <Link to={section.buttonLink || "/about"} className="text-white hover:text-cinema-red uppercase tracking-widest text-xs font-bold transition-colors inline-flex items-center gap-2 border-b border-gray-700 hover:border-cinema-red pb-1">
+              {section.buttonText || "Read About"} <ArrowRight className="w-4 h-4" />
             </Link>
           </motion.div>
         </div>

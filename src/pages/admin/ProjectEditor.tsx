@@ -185,31 +185,66 @@ export default function ProjectEditor() {
             <div className="space-y-2">
               <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Main Video Provider</label>
               <select name="video.provider" value={formData.video.provider} onChange={handleChange} className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none transition-colors">
-                <option value="vimeo">Vimeo</option>
                 <option value="youtube">YouTube</option>
                 <option value="google_drive">Google Drive</option>
                 <option value="direct">Direct Upload / MP4 URL</option>
+                <option value="vimeo">Vimeo</option>
               </select>
             </div>
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Main Video URL</label>
-              <MediaSelector 
-                type="video" 
-                value={formData.video.url} 
-                onChange={(val) => {
-                  const isGoogleDrive = val.includes('drive.google.com') || val.includes('docs.google.com');
-                  setFormData(prev => ({
-                    ...prev,
-                    video: {
-                      ...prev.video,
-                      url: val,
-                      provider: isGoogleDrive ? 'google_drive' : prev.video.provider,
-                      googleDriveFileId: isGoogleDrive ? parseGoogleDriveUrl(val) : prev.video.googleDriveFileId
-                    }
-                  }));
-                }} 
-              />
-            </div>
+            
+            {formData.video.provider === 'youtube' || formData.video.provider === 'vimeo' ? (
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Video URL</label>
+                <input 
+                  type="text" 
+                  value={formData.video.url}
+                  onChange={(e) => {
+                    setFormData(prev => ({
+                      ...prev,
+                      video: { ...prev.video, url: e.target.value }
+                    }));
+                  }}
+                  placeholder="https://www.youtube.com/watch?v=..."
+                  className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none transition-colors"
+                />
+              </div>
+            ) : formData.video.provider === 'google_drive' ? (
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Google Drive URL</label>
+                <input 
+                  type="text" 
+                  value={formData.video.url}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setFormData(prev => ({
+                      ...prev,
+                      video: {
+                        ...prev.video,
+                        url: val,
+                        googleDriveFileId: parseGoogleDriveUrl(val)
+                      }
+                    }));
+                  }}
+                  placeholder="https://drive.google.com/file/d/..."
+                  className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none transition-colors"
+                />
+                <p className="text-[10px] text-yellow-500 font-bold uppercase tracking-widest mt-1">Google Drive video cannot be accessed unless you set the file to "Anyone with the link → Viewer".</p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Direct Video</label>
+                <MediaSelector 
+                  type="video" 
+                  value={formData.video.url} 
+                  onChange={(val) => {
+                    setFormData(prev => ({
+                      ...prev,
+                      video: { ...prev.video, url: val }
+                    }));
+                  }} 
+                />
+              </div>
+            )}
           </div>
 
           <div className="space-y-2">

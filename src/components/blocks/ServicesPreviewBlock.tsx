@@ -74,8 +74,8 @@ export default function ServicesPreviewBlock({ section }: ServicesPreviewBlockPr
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
         >
-          <Link to="/services" className="btn-primary inline-flex items-center gap-2 px-8 py-4 uppercase tracking-widest text-xs font-semibold">
-            View Services <ArrowRight className="w-4 h-4" />
+          <Link to={section.buttonLink || "/services"} className="btn-primary inline-flex items-center gap-2 px-8 py-4 uppercase tracking-widest text-xs font-semibold">
+            {section.buttonText || "View Services"} <ArrowRight className="w-4 h-4" />
           </Link>
         </motion.div>
       </div>

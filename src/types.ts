@@ -62,7 +62,7 @@ export type SectionBackground = 'transparent' | 'cinema-black' | 'cinema-dark' |
 export type SectionSpacing = 'tight' | 'normal' | 'loose';
 
 export interface ProjectSelection {
-  type: 'all' | 'manual';
+  type: 'all' | 'manual' | 'categories';
   ids: string[];
 }
 
@@ -99,4 +99,7 @@ export interface PageSection {
   showreelUrl?: string;
   mediaUrl?: string; // Add support for background media in hero sections
   mediaType?: 'image' | 'video';
+  description?: string;
+  buttonText?: string;
+  buttonLink?: string;
 }

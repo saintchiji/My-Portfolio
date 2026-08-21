@@ -60,9 +60,9 @@ export default function HeroBlock({ section }: HeroBlockProps) {
           {section.title}
         </motion.h1>
         
-        {section.showreelUrl && (
+        {(section.buttonLink || section.showreelUrl) && (
           <motion.a 
-            href={section.showreelUrl}
+            href={section.buttonLink || section.showreelUrl}
             target="_blank"
             rel="noopener noreferrer"
             initial={{ opacity: 0, scale: 0.9 }}
@@ -71,7 +71,7 @@ export default function HeroBlock({ section }: HeroBlockProps) {
             className="btn-primary group inline-flex items-center gap-4 px-8 py-4 uppercase tracking-widest text-xs font-semibold transition-colors duration-500 hover:text-white"
           >
             <Play className="w-4 h-4 fill-current group-hover:scale-110 transition-transform" />
-            <span>Play Showreel</span>
+            <span>{section.buttonText || 'Play Showreel'}</span>
           </motion.a>
         )}
       </div>
