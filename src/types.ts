@@ -34,6 +34,8 @@ export interface BrandingConfig {
   logoWidth: number;
   mobileLogoWidth: number;
   footerLogoWidth: number;
+  logoHeightDesktop?: number;
+  logoHeightMobile?: number;
 }
 
 

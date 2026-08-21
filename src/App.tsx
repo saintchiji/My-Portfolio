@@ -24,11 +24,8 @@ import AdminLayout from './components/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import ProjectList from './pages/admin/ProjectList';
 import ProjectEditor from './pages/admin/ProjectEditor';
-import SectionBuilder from './pages/admin/SectionBuilder';
-import ThemeEditor from './pages/admin/ThemeEditor';
-import ContentEditor from './pages/admin/ContentEditor';
-import MediaLibrary from './pages/admin/MediaLibrary';
-import BrandingEditor from './pages/admin/BrandingEditor';
+import PageBuilder from './pages/admin/PageBuilder';
+import Settings from './pages/admin/Settings';
 
 // A wrapper to hide standard Nav/Footer for Admin routes
 function MainLayout({ children }: { children: React.ReactNode }) {
@@ -73,12 +70,9 @@ export default function App() {
                         <Route index element={<AdminDashboard />} />
                         <Route path="projects" element={<ProjectList />} />
                         <Route path="projects/:id" element={<ProjectEditor />} />
-                        <Route path="sections" element={<SectionBuilder />} />
-                        <Route path="theme" element={<ThemeEditor />} />
-                        <Route path="content" element={<ContentEditor />} />
-                        <Route path="media" element={<MediaLibrary />} />
-                        <Route path="branding" element={<BrandingEditor />} />
-                        {/* Stub other routes to AdminDashboard for now */}
+                        <Route path="pages" element={<PageBuilder />} />
+                        <Route path="settings" element={<Settings />} />
+                        {/* Fallback */}
                         <Route path="*" element={<AdminDashboard />} />
                       </Route>
                     </Routes>

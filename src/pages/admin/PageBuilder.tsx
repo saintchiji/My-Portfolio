@@ -8,7 +8,7 @@ export default function PageBuilder() {
   const { content, updateContent, updateNestedContent } = useContent();
 
   return (
-    <div className="pb-24 max-w-6xl mx-auto">
+    <div className="pb-24 max-w-6xl mx-auto p-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-serif text-white tracking-widest uppercase">Page Builder</h1>
       </div>
@@ -37,7 +37,6 @@ export default function PageBuilder() {
         {activeTab === 'home' && <SectionBuilder />}
         {activeTab === 'about' && (
            <div className="bg-cinema-black border border-gray-800 p-8 rounded-lg space-y-8">
-            {/* Same content as ContentEditor's About tab */}
              <div className="space-y-6">
               <h3 className="text-xl font-serif text-white border-b border-gray-800 pb-2">Main Content</h3>
               <div>

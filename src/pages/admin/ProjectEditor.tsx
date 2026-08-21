@@ -135,21 +135,19 @@ export default function ProjectEditor() {
             </div>
             
             <div className="space-y-2">
-              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Category</label>
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Category (Optional)</label>
               <select name="category" value={formData.category} onChange={handleChange} className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none transition-colors">
+                <option value="">Select Category</option>
+                <option value="Long-Form">Long-Form</option>
+                <option value="Short-Form">Short-Form</option>
                 <option value="Commercial">Commercial</option>
-                <option value="Short Film">Short Film</option>
-                <option value="Documentary">Documentary</option>
+                <option value="Wedding">Wedding</option>
+                <option value="Cinematography">Cinematography</option>
+                <option value="Video Editing">Video Editing</option>
                 <option value="Music Video">Music Video</option>
+                <option value="Documentary">Documentary</option>
                 <option value="Fashion">Fashion</option>
-                <option value="Experimental">Experimental</option>
-              </select>
-            </div>
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Format</label>
-              <select name="format" value={formData.format} onChange={handleChange} className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none transition-colors">
-                <option value="Short-form">Short-form</option>
-                <option value="Long-form">Long-form</option>
+                <option value="Other">Other</option>
               </select>
             </div>
             
@@ -247,7 +245,7 @@ export default function ProjectEditor() {
                 <div className={`block w-10 h-6 rounded-full transition-colors ${formData.published ? 'bg-cinema-red' : 'bg-gray-700'}`}></div>
                 <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${formData.published ? 'translate-x-4' : ''}`}></div>
               </div>
-              <span className="text-sm font-medium text-gray-300 group-hover:text-white transition-colors">Published</span>
+              <span className="text-sm font-medium text-gray-300 group-hover:text-white transition-colors">Display on Work Page</span>
             </label>
             
             <label className="flex items-center gap-3 cursor-pointer group">

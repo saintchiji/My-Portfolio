@@ -3,15 +3,11 @@ import { useState } from 'react';
 import { 
   LayoutDashboard, 
   Film, 
-  Tags, 
   Layers, 
-  Image as ImageIcon, 
-  Palette, 
-  Menu as MenuIcon, 
   Settings,
   LogOut,
   X,
-  FileText,
+  Menu as MenuIcon,
   UploadCloud
 } from 'lucide-react';
 import { useDatabase } from '../../context/DatabaseContext';
@@ -23,11 +19,8 @@ export default function AdminSidebar() {
   const navItems = [
     { name: 'Dashboard', path: '/admin', icon: LayoutDashboard },
     { name: 'Projects', path: '/admin/projects', icon: Film },
-    { name: 'Sections', path: '/admin/sections', icon: Layers },
-    { name: 'Site Content', path: '/admin/content', icon: FileText },
-    { name: 'Media Library', path: '/admin/media', icon: ImageIcon },
-    { name: 'Branding', path: '/admin/branding', icon: Palette },
-    { name: 'Theme', path: '/admin/theme', icon: Settings },
+    { name: 'Page Builder', path: '/admin/pages', icon: Layers },
+    { name: 'Settings', path: '/admin/settings', icon: Settings },
   ];
 
   return (
@@ -92,8 +85,9 @@ export default function AdminSidebar() {
             <UploadCloud className="w-5 h-5" />
             {isPublishing ? 'PUBLISHING...' : 'PUBLISH CHANGES'}
           </button>
+          
           <NavLink 
-            to="/" 
+            to="/"
             className="flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-900 transition-colors"
           >
             <LogOut className="w-5 h-5" />
