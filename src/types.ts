@@ -95,4 +95,6 @@ export interface PageSection {
   projectSelection: ProjectSelection;
   order: number;
   showreelUrl?: string;
+  mediaUrl?: string; // Add support for background media in hero sections
+  mediaType?: 'image' | 'video';
 }

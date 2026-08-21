@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowRight, Film, Scissors, PlaySquare, MonitorPlay, Clapperboard } from 'lucide-react';
 import { useContent } from '../context/ContentContext';
+import MediaImage from '../components/MediaImage';
+import MediaVideo from '../components/MediaVideo';
 
 const IconMap: Record<string, any> = {
   'Scissors': Scissors,
@@ -13,6 +15,7 @@ const IconMap: Record<string, any> = {
 
 export default function Services() {
   const { content } = useContent();
+  
   const services = content.services.filter(s => s.isVisible).sort((a, b) => a.order - b.order);
 
   return (
@@ -57,16 +60,37 @@ export default function Services() {
                   </Link>
                 </div>
                 
-                <div className="lg:col-span-6 lg:col-start-7 bg-cinema-black border border-gray-800 p-8 md:p-12">
-                  <h3 className="uppercase tracking-widest text-sm font-bold text-white mb-8 border-b border-gray-800 pb-4">Capabilities</h3>
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {service.capabilities.map((cap, i) => (
-                      <li key={i} className="flex items-start gap-3 text-gray-400">
-                        <span className="text-cinema-red mt-1">•</span>
-                        <span>{cap}</span>
-                      </li>
-                    ))}
-                  </ul>
+                <div className="lg:col-span-7 lg:col-start-6">
+                  {service.mediaUrl && (
+                    <div className="w-full aspect-video border border-gray-800 bg-cinema-black mb-8 overflow-hidden">
+                       {service.mediaType === 'video' ? (
+                         <MediaVideo
+                            src={service.mediaUrl}
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            className="w-full h-full object-cover grayscale opacity-70 hover:opacity-100 hover:grayscale-0 transition-all duration-700"
+                         />
+                       ) : (
+                         <MediaImage
+                            src={service.mediaUrl}
+                            className="w-full h-full object-cover grayscale opacity-70 hover:opacity-100 hover:grayscale-0 transition-all duration-700"
+                         />
+                       )}
+                    </div>
+                  )}
+                  <div className="bg-cinema-black border border-gray-800 p-8 md:p-12">
+                    <h3 className="uppercase tracking-widest text-sm font-bold text-white mb-8 border-b border-gray-800 pb-4">Capabilities</h3>
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {service.capabilities.map((cap, i) => (
+                        <li key={i} className="flex items-start gap-3 text-gray-400">
+                          <span className="text-cinema-red mt-1">•</span>
+                          <span>{cap}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </motion.div>
             );
@@ -102,7 +126,6 @@ export default function Services() {
             </Link>
           </div>
         </section>
-
       </div>
     </div>
   );

@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { useContent } from '../context/ContentContext';
+import MediaImage from '../components/MediaImage';
+import MediaVideo from '../components/MediaVideo';
 
 export default function About() {
   const { content } = useContent();
@@ -25,6 +27,26 @@ export default function About() {
                 <p>Visual Storytelling & Cinematography</p>
                 <p>{content.contact.location}</p>
               </div>
+
+              {content.about.mediaUrl && (
+                <div className="mt-12 aspect-[4/5] w-full max-w-sm overflow-hidden border border-gray-800 hidden md:block">
+                  {content.about.mediaType === 'video' ? (
+                     <MediaVideo
+                        src={content.about.mediaUrl}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        className="w-full h-full object-cover grayscale opacity-80"
+                     />
+                  ) : (
+                     <MediaImage
+                        src={content.about.mediaUrl}
+                        className="w-full h-full object-cover grayscale opacity-80"
+                     />
+                  )}
+                </div>
+              )}
             </div>
             
             <div className="md:col-span-7 lg:col-span-6">
@@ -35,6 +57,26 @@ export default function About() {
                 <p>{content.about.biography1}</p>
                 <p>{content.about.biography2}</p>
               </div>
+              
+              {content.about.mediaUrl && (
+                <div className="mt-12 aspect-video w-full overflow-hidden border border-gray-800 md:hidden">
+                  {content.about.mediaType === 'video' ? (
+                     <MediaVideo
+                        src={content.about.mediaUrl}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        className="w-full h-full object-cover grayscale opacity-80"
+                     />
+                  ) : (
+                     <MediaImage
+                        src={content.about.mediaUrl}
+                        className="w-full h-full object-cover grayscale opacity-80"
+                     />
+                  )}
+                </div>
+              )}
             </div>
           </motion.div>
         </section>

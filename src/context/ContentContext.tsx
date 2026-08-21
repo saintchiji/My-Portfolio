@@ -24,6 +24,8 @@ export interface ServiceItem {
   iconName: string;
   order: number;
   isVisible: boolean;
+  mediaUrl?: string; // Add support for media in Services
+  mediaType?: 'image' | 'video';
 }
 
 export interface SiteContent {
@@ -47,6 +49,8 @@ export interface SiteContent {
     biography1: string;
     biography2: string;
     philosophy: string;
+    mediaUrl?: string; // Add support for media in About
+    mediaType?: 'image' | 'video';
     capabilities: { id: string; title: string; description: string }[];
     approach: { id: string; step: string; title: string; desc: string }[];
   };

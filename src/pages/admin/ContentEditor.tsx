@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { useContent } from '../../context/ContentContext';
 import { motion } from 'motion/react';
 import { Save, CheckCircle } from 'lucide-react';
+import MediaSelector from '../../components/admin/MediaSelector';
 
 export default function ContentEditor() {
   const { content, updateContent, updateNestedContent } = useContent();
-  const [activeTab, setActiveTab] = useState<'branding' | 'contact' | 'footer' | 'about' | 'services'>('branding');
+  const [activeTab, setActiveTab] = useState<'branding' | 'navigation' | 'contact' | 'footer' | 'about' | 'services'>('branding');
   const [saved, setSaved] = useState(false);
 
   const handleSave = () => {
@@ -268,6 +269,19 @@ export default function ContentEditor() {
                   />
                 </div>
               </div>
+
+              <div>
+                <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">About Page Media (Video or Image)</label>
+                <MediaSelector 
+                  type="any"
+                  value={content.about.mediaUrl || ''}
+                  onChange={(val, asset) => {
+                    const mediaType = asset?.type === 'video' || val.includes('mp4') || val.includes('youtube') || val.includes('vimeo') ? 'video' : 'image';
+                    updateNestedContent('about', 'mediaUrl', val);
+                    updateNestedContent('about', 'mediaType', mediaType);
+                  }}
+                />
+              </div>
             </div>
           </div>
         )}
@@ -341,6 +355,19 @@ export default function ContentEditor() {
                             updateContent({ services: newServices });
                           }}
                           className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none resize-none"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-[10px] uppercase tracking-widest font-bold text-gray-500 mb-2">Service Media (Optional)</label>
+                        <MediaSelector 
+                          type="any"
+                          value={service.mediaUrl || ''}
+                          onChange={(val, asset) => {
+                            const newServices = [...content.services];
+                            const mediaType = asset?.type === 'video' || val.includes('mp4') || val.includes('youtube') || val.includes('vimeo') ? 'video' : 'image';
+                            newServices[index] = { ...service, mediaUrl: val, mediaType };
+                            updateContent({ services: newServices });
+                          }}
                         />
                       </div>
                     </div>

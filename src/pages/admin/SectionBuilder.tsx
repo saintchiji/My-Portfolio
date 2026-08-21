@@ -6,6 +6,7 @@ import {
   GripVertical, Plus, Trash2, Copy, Eye, EyeOff, ChevronDown, ChevronUp 
 } from 'lucide-react';
 import { PageSection, SectionType, PortfolioLayout, SectionSpacing, SectionBackground } from '../../types';
+import MediaSelector from '../../components/admin/MediaSelector';
 
 export default function SectionBuilder() {
   const { sections, addSection, updateSection, deleteSection, duplicateSection, reorderSections } = useSections();
@@ -187,16 +188,29 @@ export default function SectionBuilder() {
                             </div>
 
                             {section.type === 'hero' && (
-                              <div className="space-y-2 mt-4">
-                                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Showreel URL</label>
-                                <input 
-                                  type="url" 
-                                  value={section.showreelUrl || ''} 
-                                  onChange={e => updateSection(section.id, { showreelUrl: e.target.value })} 
-                                  placeholder="https://youtube.com/watch?v=..."
-                                  className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none" 
-                                />
-                                <p className="text-xs text-gray-500">The link to open when "Play Showreel" is clicked.</p>
+                              <div className="space-y-4 mt-4">
+                                <div>
+                                  <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-2">Background Media URL</label>
+                                  <MediaSelector 
+                                    type="any"
+                                    value={section.mediaUrl || ''}
+                                    onChange={(val, asset) => {
+                                      const mediaType = asset?.type === 'video' || val.includes('mp4') || val.includes('youtube') || val.includes('vimeo') ? 'video' : 'image';
+                                      updateSection(section.id, { mediaUrl: val, mediaType });
+                                    }}
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Showreel URL</label>
+                                  <input 
+                                    type="url" 
+                                    value={section.showreelUrl || ''} 
+                                    onChange={e => updateSection(section.id, { showreelUrl: e.target.value })} 
+                                    placeholder="https://youtube.com/watch?v=..."
+                                    className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none" 
+                                  />
+                                  <p className="text-xs text-gray-500">The link to open when "Play Showreel" is clicked.</p>
+                                </div>
                               </div>
                             )}
 

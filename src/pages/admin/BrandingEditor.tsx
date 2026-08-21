@@ -1,4 +1,5 @@
 import { useBranding } from '../../context/BrandingContext';
+import MediaSelector from '../../components/admin/MediaSelector';
 
 export default function BrandingEditor() {
   const { branding, updateBranding } = useBranding();
@@ -36,42 +37,37 @@ export default function BrandingEditor() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Primary Logo URL</label>
-              <input 
-                type="text" 
+              <MediaSelector 
+                type="image" 
                 value={branding.primaryLogo || ''}
-                onChange={e => updateBranding({ primaryLogo: e.target.value })}
-                placeholder="Paste URL from Media Library"
-                className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none"
+                onChange={val => updateBranding({ primaryLogo: val })}
               />
             </div>
             
             <div className="space-y-2">
               <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Light Logo (For dark backgrounds)</label>
-              <input 
-                type="text" 
+              <MediaSelector 
+                type="image" 
                 value={branding.lightLogo || ''}
-                onChange={e => updateBranding({ lightLogo: e.target.value })}
-                className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none"
+                onChange={val => updateBranding({ lightLogo: val })}
               />
             </div>
 
             <div className="space-y-2">
               <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Mobile Logo (Icon only)</label>
-              <input 
-                type="text" 
+              <MediaSelector 
+                type="image" 
                 value={branding.mobileLogo || ''}
-                onChange={e => updateBranding({ mobileLogo: e.target.value })}
-                className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none"
+                onChange={val => updateBranding({ mobileLogo: val })}
               />
             </div>
 
             <div className="space-y-2">
               <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Favicon</label>
-              <input 
-                type="text" 
+              <MediaSelector 
+                type="image" 
                 value={branding.favicon || ''}
-                onChange={e => updateBranding({ favicon: e.target.value })}
-                className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none"
+                onChange={val => updateBranding({ favicon: val })}
               />
             </div>
           </div>
