@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { db, doc, setDoc, onSnapshot } from '../lib/firebase';
 import { useLocation } from 'react-router-dom';
 import { Project, PageSection, ThemeConfig, BrandingConfig, MediaAsset } from '../types';
+import { Loader2 } from 'lucide-react';
 
 export interface SiteConfiguration {
   projects: Project[];
@@ -28,6 +29,8 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
   const [draftConfig, setDraftConfig] = useState<SiteConfiguration | null>(null);
   const [publishedConfig, setPublishedConfig] = useState<SiteConfiguration | null>(null);
   const [isPublishing, setIsPublishing] = useState(false);
+  const [isDraftLoaded, setIsDraftLoaded] = useState(false);
+  const [isPublishedLoaded, setIsPublishedLoaded] = useState(false);
   
   const location = useLocation();
   const isAdmin = location.pathname.startsWith('/admin');
@@ -37,10 +40,16 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
     const unsubscribeDraft = onSnapshot(doc(db, 'site', 'draft'), (docSnap) => {
       if (docSnap.exists()) {
         setDraftConfig(docSnap.data() as SiteConfiguration);
+        setIsDraftLoaded(true);
       } else {
         // Initialize from local storage or defaults
-        migrateInitialData();
+        migrateInitialData().then(() => {
+          // The next snapshot will trigger when this finishes and sets it to true
+        });
       }
+    }, (error) => {
+      console.error("Error loading draft config:", error);
+      setIsDraftLoaded(true); // Prevent infinite loading on error
     });
 
     // Listen to Published
@@ -48,6 +57,10 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
       if (docSnap.exists()) {
         setPublishedConfig(docSnap.data() as SiteConfiguration);
       }
+      setIsPublishedLoaded(true);
+    }, (error) => {
+      console.error("Error loading published config:", error);
+      setIsPublishedLoaded(true); // Prevent infinite loading on error
     });
 
     return () => {
@@ -111,6 +124,16 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
   // If in admin mode, show the draft. Otherwise, show published.
   // Fallback to draft if published is empty (e.g. first time setup)
   const activeConfig = isAdmin ? draftConfig : (publishedConfig || draftConfig);
+
+  const isLoaded = isAdmin ? isDraftLoaded : (isPublishedLoaded && isDraftLoaded);
+
+  if (!isLoaded) {
+    return (
+      <div className="fixed inset-0 bg-cinema-dark flex items-center justify-center z-50">
+        <Loader2 className="w-8 h-8 text-gray-500 animate-spin opacity-50" />
+      </div>
+    );
+  }
 
   return (
     <DatabaseContext.Provider value={{

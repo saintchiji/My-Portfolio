@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useLayoutEffect, ReactNode } from 'react';
 import { ThemeConfig } from '../types';
 import { useDatabase } from './DatabaseContext';
 
@@ -33,7 +33,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   
   const theme = activeConfig?.theme ? { ...defaultTheme, ...activeConfig.theme } : defaultTheme;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Apply CSS Variables to :root
     const root = document.documentElement;
     root.style.setProperty('--bg-color', theme.bgColor);
