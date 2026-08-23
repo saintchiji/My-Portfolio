@@ -11,7 +11,7 @@ interface SectionContextType {
   reorderSections: (startIndex: number, endIndex: number) => void;
 }
 
-export const initialSections: PageSection[] = [
+const initialSections: PageSection[] = [
   {
     id: 'hero-1',
     type: 'hero',
@@ -68,41 +68,6 @@ export const initialSections: PageSection[] = [
     isHidden: false,
     projectSelection: { type: 'all', ids: [] },
     order: 3
-  },
-  {
-    id: 'contact-1',
-    type: 'contact',
-    title: 'GET IN TOUCH',
-    subtitle: 'Contact',
-    description: 'Ready to build something worth watching?',
-    buttons: [{ id: 'b1', text: 'Email Us', url: 'mailto:hello@vxnstudio.com', isVisible: true }],
-    layout: 'hero',
-    background: 'cinema-dark',
-    spacing: 'normal',
-    isHidden: false,
-    projectSelection: { type: 'all', ids: [] },
-    order: 4
-  },
-  {
-    id: 'footer-1',
-    type: 'footer',
-    title: 'Footer',
-    footerText: 'A boutique creative studio specializing in visual storytelling and high-end cinematography.',
-    copyright: '© 2026 VXN Studio.',
-    layout: 'hero',
-    background: 'cinema-black',
-    spacing: 'normal',
-    isHidden: false,
-    projectSelection: { type: 'all', ids: [] },
-    items: [
-      { id: 'i1', title: 'Work', description: '', buttonUrl: '/work', isVisible: true, order: 0 },
-      { id: 'i2', title: 'About', description: '', buttonUrl: '/about', isVisible: true, order: 1 },
-      { id: 'i3', title: 'Services', description: '', buttonUrl: '/services', isVisible: true, order: 2 },
-      { id: 'i4', title: 'Contact', description: '', buttonUrl: '/contact', isVisible: true, order: 3 },
-      { id: 'i5', title: 'Instagram', description: '', buttonUrl: '#', iconName: 'Instagram', isVisible: true, order: 4 },
-      { id: 'i6', title: 'Vimeo', description: '', buttonUrl: '#', iconName: 'Vimeo', isVisible: true, order: 5 }
-    ],
-    order: 5
   }
 ];
 

@@ -118,26 +118,3 @@ export const projects: Project[] = [
     order: 5
   }
 ];
-
-import { initialSections as initSec } from './context/SectionContext';
-import { defaultTheme as defTheme } from './context/ThemeContext';
-
-export const initialSections = initSec;
-export const initialTheme = defTheme;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-export const initialContent = null;
-export const initialBranding = null;
-export const initialMedia = [];

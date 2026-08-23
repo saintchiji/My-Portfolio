@@ -57,7 +57,7 @@ export interface Project {
   order: number;
 }
 
-export type SectionType = 'hero' | 'portfolio' | 'about-preview' | 'services-preview' | 'contact' | 'footer';
+export type SectionType = 'hero' | 'portfolio' | 'about-preview' | 'services-preview';
 export type PortfolioLayout = 'cinematic-grid' | 'masonry' | 'carousel' | 'full-width' | 'two-column' | 'three-column' | 'editorial' | 'featured-supporting';
 export type SectionBackground = 'transparent' | 'cinema-black' | 'cinema-dark' | 'cinema-red-burn';
 export type SectionSpacing = 'tight' | 'normal' | 'loose';
@@ -85,26 +85,6 @@ export interface ThemeConfig {
   overlayIntensity: number;
 }
 
-export interface SectionButton {
-  id: string;
-  text: string;
-  url: string;
-  isVisible: boolean;
-}
-
-export interface SectionItem {
-  id: string;
-  title: string;
-  description: string;
-  mediaUrl?: string;
-  mediaType?: 'image' | 'video';
-  iconName?: string;
-  buttonText?: string;
-  buttonUrl?: string;
-  isVisible: boolean;
-  order: number;
-}
-
 export interface PageSection {
   id: string;
   type: SectionType;
@@ -123,9 +103,4 @@ export interface PageSection {
   description?: string;
   buttonText?: string;
   buttonLink?: string;
-  buttons?: SectionButton[];
-  items?: SectionItem[];
-  footerText?: string;
-  copyright?: string;
-  limit?: number; // for selected work count
 }
