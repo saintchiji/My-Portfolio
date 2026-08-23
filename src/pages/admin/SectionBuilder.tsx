@@ -4,10 +4,11 @@ import { useSections } from '../../context/SectionContext';
 import { PageSection } from '../../types';
 import { GripVertical, Eye, EyeOff, Copy, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 import MediaSelector from '../../components/admin/MediaSelector';
+import { SectionEditor } from '../../components/admin/SectionEditors';
 import { useContent } from '../../context/ContentContext';
 
 export default function SectionBuilder() {
-  const { sections, updateSection, deleteSection, duplicateSection, reorderSections } = useSections();
+  const { sections, addSection, updateSection, deleteSection, duplicateSection, reorderSections } = useSections();
   const [expandedId, setExpandedId] = useState<string | null>(null);
   
   const handleDragEnd = (result: any) => {
@@ -19,6 +20,14 @@ export default function SectionBuilder() {
 
   return (
     <div className="space-y-6">
+      <div className="flex justify-end gap-2">
+        <button onClick={() => addSection({ type: 'hero', title: 'New Hero', subtitle: '', description: '', layout: 'hero', background: 'cinema-black', spacing: 'normal', isHidden: false, projectSelection: { type: 'all', ids: [] }, buttons: [] })} className="text-xs bg-gray-800 hover:bg-gray-700 text-white px-3 py-1.5 rounded">Add Hero</button>
+        <button onClick={() => addSection({ type: 'portfolio', title: 'Selected Work', subtitle: '', description: '', layout: 'cinematic-grid', background: 'cinema-black', spacing: 'normal', isHidden: false, projectSelection: { type: 'all', ids: [] } })} className="text-xs bg-gray-800 hover:bg-gray-700 text-white px-3 py-1.5 rounded">Add Portfolio</button>
+        <button onClick={() => addSection({ type: 'about-preview', title: 'About Us', subtitle: '', description: '', layout: 'hero', background: 'cinema-black', spacing: 'normal', isHidden: false, projectSelection: { type: 'all', ids: [] } })} className="text-xs bg-gray-800 hover:bg-gray-700 text-white px-3 py-1.5 rounded">Add About</button>
+        <button onClick={() => addSection({ type: 'services-preview', title: 'Services', subtitle: '', description: '', layout: 'hero', background: 'cinema-black', spacing: 'normal', isHidden: false, projectSelection: { type: 'all', ids: [] }, items: [] })} className="text-xs bg-gray-800 hover:bg-gray-700 text-white px-3 py-1.5 rounded">Add Services</button>
+        <button onClick={() => addSection({ type: 'contact', title: 'Get In Touch', subtitle: '', description: '', layout: 'hero', background: 'cinema-black', spacing: 'normal', isHidden: false, projectSelection: { type: 'all', ids: [] }, buttons: [] })} className="text-xs bg-gray-800 hover:bg-gray-700 text-white px-3 py-1.5 rounded">Add Contact</button>
+        <button onClick={() => addSection({ type: 'footer', title: 'Footer', subtitle: '', description: '', footerText: '', copyright: '', layout: 'hero', background: 'cinema-black', spacing: 'normal', isHidden: false, projectSelection: { type: 'all', ids: [] }, items: [] })} className="text-xs bg-gray-800 hover:bg-gray-700 text-white px-3 py-1.5 rounded">Add Footer</button>
+      </div>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="sections">
           {(provided) => (
@@ -80,95 +89,7 @@ export default function SectionBuilder() {
 
                       {/* Editor Content */}
                       {expandedId === section.id && (
-                        <div className="p-6 space-y-6 bg-cinema-black">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                              <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Title</label>
-                              <input
-                                type="text"
-                                value={section.title}
-                                onChange={e => updateSection(section.id, { title: e.target.value })}
-                                className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Subtitle</label>
-                              <input
-                                type="text"
-                                value={section.subtitle || ''}
-                                onChange={e => updateSection(section.id, { subtitle: e.target.value })}
-                                className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none"
-                              />
-                            </div>
-                          </div>
-                          
-                          {/* Description for non-Hero if needed, or all */}
-                          <div>
-                            <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Description</label>
-                            <textarea
-                              rows={3}
-                              value={section.description || ''}
-                              onChange={e => updateSection(section.id, { description: e.target.value })}
-                              className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none resize-none"
-                            />
-                          </div>
-
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                              <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Button Text</label>
-                              <input
-                                type="text"
-                                value={section.buttonText || ''}
-                                onChange={e => updateSection(section.id, { buttonText: e.target.value })}
-                                className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Button Link</label>
-                              <input
-                                type="text"
-                                value={section.buttonLink || ''}
-                                onChange={e => updateSection(section.id, { buttonLink: e.target.value })}
-                                className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none"
-                              />
-                            </div>
-                          </div>
-
-                          {section.type === 'hero' && (
-                            <div className="pt-4 border-t border-gray-800">
-                              <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Hero Background Media</label>
-                              <MediaSelector
-                                type="any"
-                                value={section.mediaUrl || ''}
-                                onChange={(val, asset) => {
-                                  const mediaType = asset?.type === 'video' || val.includes('mp4') || val.includes('youtube') || val.includes('vimeo') ? 'video' : 'image';
-                                  updateSection(section.id, { mediaUrl: val, mediaType });
-                                }}
-                              />
-                            </div>
-                          )}
-
-                          {section.type === 'portfolio' && (
-                            <div className="pt-4 border-t border-gray-800 space-y-4">
-                              <div>
-                                <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Portfolio Layout</label>
-                                <select
-                                  value={section.layout}
-                                  onChange={e => updateSection(section.id, { layout: e.target.value as any })}
-                                  className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-cinema-red outline-none"
-                                >
-                                  <option value="cinematic-grid">Cinematic Grid</option>
-                                  <option value="masonry">Masonry</option>
-                                  <option value="carousel">Carousel</option>
-                                  <option value="two-column">Two Column</option>
-                                  <option value="three-column">Three Column</option>
-                                </select>
-                              </div>
-                              <CategoryVisibilityEditor section={section} updateSection={updateSection} />
-                            </div>
-                          )}
-
-                        </div>
+                        <SectionEditor section={section} />
                       )}
                     </div>
                   )}
@@ -183,48 +104,3 @@ export default function SectionBuilder() {
   );
 }
 
-function CategoryVisibilityEditor({ section, updateSection }: { section: PageSection, updateSection: any }) {
-  const allCategories = ['Long-Form', 'Short-Form', 'Commercial', 'Wedding', 'Cinematography', 'Video Editing', 'Music Video', 'Documentary', 'Fashion'];
-  // For Category Visibility, we could store it in projectSelection.
-  // Actually projectSelection was { type: 'all', ids: [] }. We can use `ids` to store allowed categories if type='categories', or just add `allowedCategories` to PageSection.
-  const isAll = section.projectSelection?.type === 'all';
-  const allowed = section.projectSelection?.ids || [];
-
-  const toggleCat = (cat: string) => {
-    let newAllowed = [...allowed];
-    if (isAll) {
-      newAllowed = allCategories.filter(c => c !== cat);
-    } else {
-      if (newAllowed.includes(cat)) {
-        newAllowed = newAllowed.filter(c => c !== cat);
-      } else {
-        newAllowed.push(cat);
-      }
-    }
-    updateSection(section.id, { projectSelection: { type: 'categories', ids: newAllowed } });
-  };
-
-  const isChecked = (cat: string) => {
-    if (isAll) return true;
-    return allowed.includes(cat);
-  };
-
-  return (
-    <div>
-      <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Category Visibility</label>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-        {allCategories.map(cat => (
-          <label key={cat} className="flex items-center gap-2 cursor-pointer p-2 bg-gray-900 rounded border border-gray-800 hover:border-gray-700">
-            <input 
-              type="checkbox"
-              checked={isChecked(cat)}
-              onChange={() => toggleCat(cat)}
-              className="accent-cinema-red"
-            />
-            <span className="text-sm text-gray-300">{cat}</span>
-          </label>
-        ))}
-      </div>
-    </div>
-  );
-}

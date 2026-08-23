@@ -33,7 +33,7 @@ export default function ServicesPreviewBlock({ section }: ServicesPreviewBlockPr
     'cinema-red-burn': 'bg-gradient-to-b from-cinema-dark via-cinema-red/10 to-cinema-dark',
   };
 
-  const previewServices = content.services.filter(s => s.isVisible).slice(0, 3);
+  const previewServices = (section.items || []).filter(s => s.isVisible);
 
   return (
     <section className={`w-full ${bgClasses[section.background]} border-y border-gray-800`} style={{ paddingTop: paddingValue, paddingBottom: paddingValue }}>
@@ -47,7 +47,10 @@ export default function ServicesPreviewBlock({ section }: ServicesPreviewBlockPr
           {section.subtitle && (
             <h3 className="uppercase tracking-widest text-xs font-bold text-cinema-red mb-4">{section.subtitle}</h3>
           )}
-          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white tracking-tight">{section.title}</h2>
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white tracking-tight mb-4">{section.title}</h2>
+          {section.description && (
+             <p className="text-gray-400 text-sm md:text-base leading-relaxed max-w-2xl mx-auto">{section.description}</p>
+          )}
         </motion.div>
 
         <motion.div 

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Home from './pages/Home';
 import Work from './pages/Work';
@@ -31,6 +31,7 @@ import Inquiries from './pages/admin/Inquiries';
 
 // A wrapper to hide standard Nav/Footer for Admin routes
 function MainLayout({ children }: { children: React.ReactNode }) {
+  const location = useLocation();
   return (
     <div className="min-h-screen bg-cinema-dark text-gray-200 selection:bg-cinema-red selection:text-white relative flex flex-col">
       <div 
@@ -40,7 +41,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
       <div className="relative z-10 flex flex-col min-h-screen">
         <Navigation />
         <main className="flex-grow">{children}</main>
-        <Footer />
+        {location.pathname !== '/' && <Footer />}
       </div>
     </div>
   );
