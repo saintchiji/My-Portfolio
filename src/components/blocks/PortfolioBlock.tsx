@@ -12,7 +12,7 @@ export default function PortfolioBlock({ section }: PortfolioBlockProps) {
   const { projects } = useProjects();
   
   // Filter and sort projects based on section configuration
-  let sectionProjects = projects.filter(p => p.published).sort((a, b) => a.order - b.order);
+  let sectionProjects = projects.filter(p => p.published && p.displayOnWork !== false).sort((a, b) => a.order - b.order);
 
   if (section.projectSelection.type === 'manual' && section.projectSelection.ids.length > 0) {
     sectionProjects = sectionProjects.filter(p => section.projectSelection.ids.includes(p.id));

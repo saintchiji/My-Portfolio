@@ -27,6 +27,8 @@ import ProjectEditor from './pages/admin/ProjectEditor';
 import PageBuilder from './pages/admin/PageBuilder';
 import Settings from './pages/admin/Settings';
 
+import Inquiries from './pages/admin/Inquiries';
+
 // A wrapper to hide standard Nav/Footer for Admin routes
 function MainLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -71,6 +73,7 @@ export default function App() {
                         <Route path="projects" element={<ProjectList />} />
                         <Route path="projects/:id" element={<ProjectEditor />} />
                         <Route path="pages" element={<PageBuilder />} />
+                        <Route path="inquiries" element={<Inquiries />} />
                         <Route path="settings" element={<Settings />} />
                         {/* Fallback */}
                         <Route path="*" element={<AdminDashboard />} />

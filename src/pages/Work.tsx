@@ -15,7 +15,7 @@ export default function Work() {
     ? portfolioSection.projectSelection.ids 
     : ['All', 'Long-Form', 'Short-Form', 'Commercial', 'Wedding', 'Cinematography', 'Video Editing', 'Music Video', 'Documentary', 'Fashion'];
   
-  let publishedProjects = projects.filter(p => p.published);
+  let publishedProjects = projects.filter(p => p.published && p.displayOnWork !== false);
 
   // Apply visibility rules
   if (portfolioSection?.projectSelection?.type === 'categories') {

@@ -8,18 +8,17 @@ import {
   LogOut,
   X,
   Menu as MenuIcon,
-  UploadCloud
+  MessageSquare
 } from 'lucide-react';
-import { useDatabase } from '../../context/DatabaseContext';
 
 export default function AdminSidebar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { publish, isPublishing } = useDatabase();
 
   const navItems = [
     { name: 'Dashboard', path: '/admin', icon: LayoutDashboard },
     { name: 'Projects', path: '/admin/projects', icon: Film },
     { name: 'Page Builder', path: '/admin/pages', icon: Layers },
+    { name: 'Inquiries', path: '/admin/inquiries', icon: MessageSquare },
     { name: 'Settings', path: '/admin/settings', icon: Settings },
   ];
 
@@ -77,15 +76,6 @@ export default function AdminSidebar() {
         </nav>
 
         <div className="p-4 border-t border-gray-800 bg-cinema-black space-y-2">
-          <button
-            onClick={publish}
-            disabled={isPublishing}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-md text-sm font-bold text-white bg-cinema-red hover:bg-red-700 transition-colors disabled:opacity-50"
-          >
-            <UploadCloud className="w-5 h-5" />
-            {isPublishing ? 'PUBLISHING...' : 'PUBLISH CHANGES'}
-          </button>
-          
           <NavLink 
             to="/"
             className="flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-900 transition-colors"

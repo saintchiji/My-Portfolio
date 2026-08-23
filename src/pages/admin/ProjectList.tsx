@@ -1,12 +1,12 @@
 import { useProjects } from '../../context/ProjectContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { Plus, GripVertical, CheckCircle2, Circle, Star } from 'lucide-react';
+import { Plus, GripVertical, CheckCircle2, Circle, Star, Eye, EyeOff } from 'lucide-react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
 export default function ProjectList() {
   const { projects, deleteProject, duplicateProject, reorderProjects, updateProject } = useProjects();
   const navigate = useNavigate();
-
+  
   // Sort by order
   const sortedProjects = [...projects].sort((a, b) => a.order - b.order);
 
@@ -16,7 +16,7 @@ export default function ProjectList() {
   };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
+    <div className="p-8 max-w-6xl mx-auto pb-32">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-serif text-white tracking-widest uppercase">Projects</h1>
         <Link 
@@ -32,8 +32,7 @@ export default function ProjectList() {
           <div className="col-span-1"></div>
           <div className="col-span-4">Project</div>
           <div className="col-span-2">Category</div>
-          <div className="col-span-1">Year</div>
-          <div className="col-span-2">Status</div>
+          <div className="col-span-3">Visibility</div>
           <div className="col-span-2 text-right">Actions</div>
         </div>
 
@@ -60,19 +59,15 @@ export default function ProjectList() {
                           <GripVertical className="w-5 h-5 cursor-grab" />
                         </div>
                         
-                        <div className="col-span-4 flex items-center gap-4">
+                        <div className="col-span-4 flex items-center gap-4 min-w-0">
                           <div className="w-16 h-10 bg-gray-800 rounded overflow-hidden flex-shrink-0 border border-gray-700">
                             {project.imageUrl && (
                               <img src={project.imageUrl.startsWith('idb://') ? '#' : project.imageUrl} alt={project.title} className="w-full h-full object-cover" />
                             )}
                           </div>
-                          <div>
+                          <div className="min-w-0 flex-1">
                             <p className="text-white font-medium truncate">{project.title}</p>
-                            {project.featured && (
-                              <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-wider text-cinema-red mt-1">
-                                <Star className="w-3 h-3 fill-current" /> Featured
-                              </span>
-                            )}
+                            <p className="text-[10px] text-gray-500 truncate">{project.year}</p>
                           </div>
                         </div>
 
@@ -80,27 +75,54 @@ export default function ProjectList() {
                           {project.category || '-'}
                         </div>
 
-                        <div className="col-span-1 text-sm text-gray-400">
-                          {project.year}
-                        </div>
-
-                        <div className="col-span-2">
+                        <div className="col-span-3 flex items-center gap-4">
                           <button
                             onClick={() => updateProject(project.id, { published: !project.published })}
-                            className="flex items-center gap-2 group"
+                            className="flex items-center gap-1 group"
+                            title={project.published ? 'Published' : 'Draft'}
                           >
                             {project.published ? (
                               <CheckCircle2 className="w-4 h-4 text-green-500" />
                             ) : (
                               <Circle className="w-4 h-4 text-gray-600 group-hover:text-gray-400 transition-colors" />
                             )}
-                            <span className={`text-xs uppercase tracking-wider ${project.published ? 'text-green-500' : 'text-gray-500 group-hover:text-gray-400'}`}>
-                              {project.published ? 'Published' : 'Draft'}
+                            <span className={`text-[10px] uppercase tracking-wider hidden lg:inline ${project.published ? 'text-green-500' : 'text-gray-500 group-hover:text-gray-400'}`}>
+                              {project.published ? 'Pub' : 'Draft'}
+                            </span>
+                          </button>
+
+                          <button
+                            onClick={() => updateProject(project.id, { displayOnWork: !(project.displayOnWork ?? true) })}
+                            className="flex items-center gap-1 group"
+                            title={project.displayOnWork !== false ? 'Shown on Work' : 'Hidden from Work'}
+                          >
+                            {project.displayOnWork !== false ? (
+                              <Eye className="w-4 h-4 text-blue-400" />
+                            ) : (
+                              <EyeOff className="w-4 h-4 text-gray-600 group-hover:text-gray-400 transition-colors" />
+                            )}
+                            <span className={`text-[10px] uppercase tracking-wider hidden lg:inline ${project.displayOnWork !== false ? 'text-blue-400' : 'text-gray-500 group-hover:text-gray-400'}`}>
+                              Work
+                            </span>
+                          </button>
+
+                          <button
+                            onClick={() => updateProject(project.id, { featured: !project.featured })}
+                            className="flex items-center gap-1 group"
+                            title={project.featured ? 'Featured' : 'Not Featured'}
+                          >
+                            {project.featured ? (
+                              <Star className="w-4 h-4 fill-cinema-red text-cinema-red" />
+                            ) : (
+                              <Star className="w-4 h-4 text-gray-600 group-hover:text-gray-400 transition-colors" />
+                            )}
+                            <span className={`text-[10px] uppercase tracking-wider hidden lg:inline ${project.featured ? 'text-cinema-red' : 'text-gray-500 group-hover:text-gray-400'}`}>
+                              Feat
                             </span>
                           </button>
                         </div>
 
-                        <div className="col-span-2 flex items-center justify-end gap-4 text-xs font-bold uppercase tracking-wider">
+                        <div className="col-span-2 flex items-center justify-end gap-3 text-xs font-bold uppercase tracking-wider">
                           <Link to={`/admin/projects/${project.id}`} className="text-white hover:text-cinema-red transition-colors">
                             Edit
                           </Link>
@@ -108,7 +130,7 @@ export default function ProjectList() {
                             onClick={() => duplicateProject(project.id)}
                             className="text-gray-500 hover:text-white transition-colors"
                           >
-                            Duplicate
+                            Dup
                           </button>
                           <button 
                             onClick={() => {
@@ -118,7 +140,7 @@ export default function ProjectList() {
                             }}
                             className="text-gray-500 hover:text-cinema-red transition-colors"
                           >
-                            Delete
+                            Del
                           </button>
                         </div>
                       </div>

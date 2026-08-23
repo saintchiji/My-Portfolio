@@ -1,0 +1,79 @@
+--- src/context/DatabaseContext.tsx
++++ src/context/DatabaseContext.tsx
+@@ -19,6 +19,8 @@
+   activeConfig: SiteConfiguration | null;
+   draftConfig: SiteConfiguration | null;
+   updateDraft: (key: keyof SiteConfiguration, data: any) => void;
++  saveDraft: () => Promise<void>;
++  hasUnsavedChanges: boolean;
+   publish: () => Promise<void>;
+   isPublishing: boolean;
+   isAdmin: boolean;
+@@ -31,6 +33,7 @@
+   const [isPublishing, setIsPublishing] = useState(false);
+   const [isDraftLoaded, setIsDraftLoaded] = useState(false);
+   const [isPublishedLoaded, setIsPublishedLoaded] = useState(false);
++  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+   
+   const location = useLocation();
+   const isAdmin = location.pathname.startsWith('/admin');
+@@ -40,7 +43,10 @@
+     // Listen to Draft
+     const unsubscribeDraft = onSnapshot(doc(db, 'site', 'draft'), (docSnap) => {
+       if (docSnap.exists()) {
+-        setDraftConfig(docSnap.data() as SiteConfiguration);
++        // Only update if no unsaved changes
++        setDraftConfig(prev => {
++          return prev && hasUnsavedChanges ? prev : docSnap.data() as SiteConfiguration;
++        });
+       } else {
+         setDraftConfig(null);
+       }
+@@ -74,7 +80,7 @@
+       unsubscribeDraft();
+       unsubscribePublished();
+     };
+-  }, []);
++  }, [hasUnsavedChanges]);
+ 
+   // For Admin, use draft. For visitors, use published.
+   const activeConfig = isAdmin ? draftConfig : publishedConfig;
+@@ -101,10 +107,17 @@
+     const newConfig = { ...draftConfig, [key]: data, updatedAt: new Date().toISOString() };
+     setDraftConfig(newConfig); // Optimistic UI update
+     
+-    // Save to Firestore draft immediately
+-    setDoc(doc(db, 'site', 'draft'), newConfig, { merge: true }).catch(err => {
+-      console.error('Failed to update draft', err);
+-    });
++    setHasUnsavedChanges(true);
++  };
++
++  const saveDraft = async () => {
++    if (!draftConfig) return;
++    try {
++      await setDoc(doc(db, 'site', 'draft'), draftConfig, { merge: true });
++      setHasUnsavedChanges(false);
++    } catch (err) {
++      console.error('Failed to save draft', err);
++    }
+   };
+ 
+   const publish = async () => {
+@@ -112,6 +125,7 @@
+     setIsPublishing(true);
+     try {
+       const configToPublish = { ...draftConfig, updatedAt: new Date().toISOString() };
++      await saveDraft(); // Save draft first
+       await setDoc(doc(db, 'site', 'published'), configToPublish);
+       alert('Successfully published site configuration!');
+     } catch (err) {
+@@ -141,6 +155,8 @@
+       activeConfig,
+       draftConfig,
+       updateDraft,
++      saveDraft,
++      hasUnsavedChanges,
+       publish,
+       isPublishing,
+       isAdmin

@@ -102,7 +102,7 @@ export const projects: Project[] = [
   {
     id: '6',
     title: 'Solitude',
-    category: 'Weddings',
+    category: 'Wedding',
     roles: ['Cinematography', 'Video Editing'],
     format: 'Long-form',
     imageUrl: 'https://images.unsplash.com/photo-1518131672697-613becd4fab5?auto=format&fit=crop&q=80',

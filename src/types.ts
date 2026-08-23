@@ -48,6 +48,7 @@ export interface Project {
   imageUrl: string;
   video: VideoInfo;
   featured?: boolean;
+  displayOnWork?: boolean;
   year: string;
   description: string;
   client?: string;

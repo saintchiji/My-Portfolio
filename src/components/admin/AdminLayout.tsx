@@ -1,7 +1,8 @@
 import { Outlet } from 'react-router-dom';
 import AdminSidebar from './AdminSidebar';
-import { useState, useEffect } from 'react';
-import { Lock } from 'lucide-react';
+import { useState } from 'react';
+import { Lock, Save, Eye, UploadCloud, AlertCircle } from 'lucide-react';
+import { useDatabase } from '../../context/DatabaseContext';
 
 export default function AdminLayout() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -9,6 +10,7 @@ export default function AdminLayout() {
   });
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
+  const { publish, isPublishing, draftConfig, activeConfig, saveDraft, hasUnsavedChanges } = useDatabase();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,11 +63,61 @@ export default function AdminLayout() {
   return (
     <div className="min-h-screen bg-cinema-dark flex">
       <AdminSidebar />
-      <main className="flex-1 md:ml-64 p-6 md:p-8 mt-16 md:mt-0 transition-all w-full overflow-x-hidden">
-        <div className="max-w-6xl mx-auto">
-          <Outlet />
-        </div>
-      </main>
+      <div className="flex-1 md:ml-64 flex flex-col min-h-screen transition-all w-full overflow-x-hidden">
+        
+        {/* Top Action Bar */}
+        <header className="sticky top-0 z-40 bg-cinema-black border-b border-gray-800 px-6 py-4 flex items-center justify-between md:flex-row flex-col gap-4 mt-16 md:mt-0">
+          <div className="flex items-center gap-3">
+            {hasUnsavedChanges ? (
+              <span className="text-yellow-500 text-sm flex items-center gap-2 font-medium">
+                <div className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></div>
+                UNSAVED CHANGES
+              </span>
+            ) : (
+              <span className="text-gray-500 text-xs uppercase tracking-widest font-bold flex items-center gap-2">
+                <AlertCircle className="w-4 h-4" />
+                Draft Saved
+              </span>
+            )}
+          </div>
+          
+          <div className="flex items-center gap-3 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
+            <button 
+              onClick={saveDraft}
+              disabled={!hasUnsavedChanges}
+              className={`flex items-center gap-2 px-4 py-2 border rounded text-xs font-bold uppercase tracking-wider transition-colors whitespace-nowrap ${
+                hasUnsavedChanges ? 'bg-gray-800 hover:bg-gray-700 text-white border-gray-600' : 'bg-gray-900 text-gray-500 border-gray-800 cursor-not-allowed'
+              }`}
+            >
+              <Save className="w-4 h-4" />
+              Save Now
+            </button>
+            <a 
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white border border-gray-700 rounded text-xs font-bold uppercase tracking-wider transition-colors whitespace-nowrap"
+            >
+              <Eye className="w-4 h-4" />
+              Preview
+            </a>
+            <button 
+              onClick={publish}
+              disabled={isPublishing}
+              className="flex items-center gap-2 px-4 py-2 bg-cinema-red hover:bg-red-700 text-white rounded text-xs font-bold uppercase tracking-wider transition-colors disabled:opacity-50 whitespace-nowrap"
+            >
+              <UploadCloud className="w-4 h-4" />
+              {isPublishing ? 'Publishing...' : 'Publish'}
+            </button>
+          </div>
+        </header>
+
+        <main className="flex-1 p-6 md:p-8">
+          <div className="max-w-6xl mx-auto">
+            <Outlet />
+          </div>
+        </main>
+      </div>
     </div>
   );
 }
