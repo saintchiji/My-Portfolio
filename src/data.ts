@@ -3,6 +3,12 @@ import { Project } from './types';
 // Using open source/public domain video samples for preview URLs
 const SAMPLE_PREVIEW = "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
 
+export const initialSections = [];
+export const initialTheme = null;
+export const initialContent = null;
+export const initialBranding = null;
+export const initialMedia = [];
+
 export const projects: Project[] = [
   {
     id: '1',
