@@ -1,44 +1,28 @@
-import { useTheme, defaultTheme } from '../../context/ThemeContext';
-import { RefreshCcw } from 'lucide-react';
-import { ThemeConfig } from '../../types';
+import { useTheme } from '../../context/ThemeContext';
 
-export default function ThemeEditor() {
-  const { theme, updateTheme, resetTheme } = useTheme();
+export default function Theme() {
+  const { theme, updateTheme } = useTheme();
 
-  const handleChange = (field: keyof ThemeConfig, value: string | number) => {
-    updateTheme({ [field]: value });
+  const handleChange = (key: string, value: string | number) => {
+    updateTheme({ [key]: value });
   };
 
   return (
-    <div className="max-w-4xl mx-auto pb-24">
-      <div className="flex items-center justify-between mb-8">
-        
-        <button
-          onClick={() => {
-            if (window.confirm('Reset all theme settings to the default Cinematic Dark theme?')) {
-              resetTheme();
-            }
-          }}
-          className="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white bg-gray-900 border border-gray-800 hover:border-gray-600 rounded transition-colors flex items-center gap-2"
-        >
-          <RefreshCcw className="w-4 h-4" /> Reset to Default
-        </button>
-      </div>
-
-      <div className="space-y-8">
-        
+    <div className="space-y-8">
+      <h1 className="text-3xl font-serif text-white tracking-widest uppercase mb-8">Theme</h1>
+      
+      <div className="space-y-6 max-w-4xl">
         {/* Colors */}
         <section className="bg-cinema-black border border-gray-800 rounded-lg p-6">
-          <h2 className="text-xl text-white font-medium mb-6 pb-4 border-b border-gray-800">Color Palette</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            
+          <h2 className="text-xl text-white font-medium mb-6 pb-4 border-b border-gray-800">Colors</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <ColorField 
-              label="Background Color" 
+              label="Background" 
               value={theme.bgColor} 
               onChange={(v) => handleChange('bgColor', v)} 
             />
             <ColorField 
-              label="Surface Color" 
+              label="Surface (Cards)" 
               value={theme.surfaceColor} 
               onChange={(v) => handleChange('surfaceColor', v)} 
             />
@@ -66,8 +50,7 @@ export default function ThemeEditor() {
               label="Border Color" 
               value={theme.borderColor} 
               onChange={(v) => handleChange('borderColor', v)} 
-            />
-            
+            />          
           </div>
         </section>
 
@@ -88,7 +71,6 @@ export default function ThemeEditor() {
                 <option value="ghost">Ghost (No Border)</option>
               </select>
             </div>
-
             <div className="space-y-2">
               <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Border Radius Base</label>
               <select 
@@ -104,7 +86,6 @@ export default function ThemeEditor() {
                 <option value="9999px">Pill / Circular</option>
               </select>
             </div>
-
           </div>
         </section>
 
@@ -127,7 +108,6 @@ export default function ThemeEditor() {
                 <option value="'Oswald', sans-serif">Oswald (Tall Sans)</option>
               </select>
             </div>
-
             <div className="space-y-2">
               <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Body Font (Sans)</label>
               <select 
@@ -141,7 +121,6 @@ export default function ThemeEditor() {
                 <option value="'Space Grotesk', sans-serif">Space Grotesk (Tech)</option>
               </select>
             </div>
-
           </div>
         </section>
 
@@ -157,7 +136,6 @@ export default function ThemeEditor() {
               onChange={(v) => handleChange('sectionSpacing', v)}
               format={(v) => `${v.toFixed(1)}x`}
             />
-
             <SliderField
               label="Typography Base Scale"
               value={theme.typographyScale}
@@ -165,7 +143,6 @@ export default function ThemeEditor() {
               onChange={(v) => handleChange('typographyScale', v)}
               format={(v) => `${v.toFixed(2)}x`}
             />
-
             <SliderField
               label="Grain Intensity"
               value={theme.grainIntensity}
@@ -173,7 +150,6 @@ export default function ThemeEditor() {
               onChange={(v) => handleChange('grainIntensity', v)}
               format={(v) => `${(v * 100).toFixed(0)}%`}
             />
-
             <SliderField
               label="Image Overlay Intensity"
               value={theme.overlayIntensity}
@@ -181,10 +157,8 @@ export default function ThemeEditor() {
               onChange={(v) => handleChange('overlayIntensity', v)}
               format={(v) => `${(v * 100).toFixed(0)}%`}
             />
-
           </div>
         </section>
-
       </div>
     </div>
   );

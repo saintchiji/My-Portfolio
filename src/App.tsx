@@ -13,6 +13,7 @@ import Contact from './pages/Contact';
 import ProjectDetail from './pages/ProjectDetail';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import WebsiteLogoCustomizer from './components/WebsiteLogoCustomizer';
 import { DatabaseProvider } from './context/DatabaseContext';
 import { ProjectProvider } from './context/ProjectContext';
 import { SectionProvider } from './context/SectionContext';
@@ -25,9 +26,13 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import ProjectList from './pages/admin/ProjectList';
 import ProjectEditor from './pages/admin/ProjectEditor';
 import PageBuilder from './pages/admin/PageBuilder';
-import Settings from './pages/admin/Settings';
-
-import Inquiries from './pages/admin/Inquiries';
+import Categories from './pages/admin/Categories';
+import AdminServices from './pages/admin/Services';
+import Branding from './pages/admin/Branding';
+import Theme from './pages/admin/Theme';
+import NavigationSettings from './pages/admin/NavigationSettings';
+import SocialMedia from './pages/admin/SocialMedia';
+import ContactInquiries from './pages/admin/ContactInquiries';
 
 // A wrapper to hide standard Nav/Footer for Admin routes
 function MainLayout({ children }: { children: React.ReactNode }) {
@@ -41,6 +46,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
         <Navigation />
         <main className="flex-grow">{children}</main>
         <Footer />
+        <WebsiteLogoCustomizer />
       </div>
     </div>
   );
@@ -73,8 +79,13 @@ export default function App() {
                         <Route path="projects" element={<ProjectList />} />
                         <Route path="projects/:id" element={<ProjectEditor />} />
                         <Route path="pages" element={<PageBuilder />} />
-                        <Route path="inquiries" element={<Inquiries />} />
-                        <Route path="settings" element={<Settings />} />
+                        <Route path="categories" element={<Categories />} />
+                        <Route path="services" element={<AdminServices />} />
+                        <Route path="branding" element={<Branding />} />
+                        <Route path="theme" element={<Theme />} />
+                        <Route path="navigation" element={<NavigationSettings />} />
+                        <Route path="social" element={<SocialMedia />} />
+                        <Route path="inquiries" element={<ContactInquiries />} />
                         {/* Fallback */}
                         <Route path="*" element={<AdminDashboard />} />
                       </Route>

@@ -1,4 +1,4 @@
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Brush } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link, useLocation } from 'react-router-dom';
@@ -12,6 +12,9 @@ export default function Navigation() {
   const location = useLocation();
   const { content } = useContent();
   const { branding } = useBranding();
+
+  const brandName = branding.logoMark || content.branding?.logoText || 'VXN';
+  const logoMode = branding.logoMode || 'text';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,44 +40,84 @@ export default function Navigation() {
     .filter(link => link.isVisible)
     .sort((a, b) => a.order - b.order);
 
-  const renderLogo = () => {
-    if (branding.logoMode === 'none') return null;
-    
-    if (branding.logoMode === 'image' && branding.primaryLogo) {
+  // Styled brand text with cinematic red highlight for 3-letter names like VXN
+  const renderTextLogo = () => {
+    if (brandName.length > 2) {
       return (
-        <MediaImage 
-          src={branding.primaryLogo} 
-          alt={content.branding.logoText} 
-          style={{ width: `${branding.logoWidth}px` }}
-          className="object-contain md:block hidden" 
-        />
+        <span className="font-serif text-2xl tracking-widest text-white">
+          {brandName.slice(0, 1)}
+          <span className="text-cinema-red">{brandName.slice(1, 2)}</span>
+          {brandName.slice(2)}
+        </span>
       );
     }
-    
-    // Splitting logic for VXN style text logo
-    return content.branding.logoText.length > 2 ? (
-      <>{content.branding.logoText.slice(0, 1)}<span className="text-cinema-red">{content.branding.logoText.slice(1, 2)}</span>{content.branding.logoText.slice(2)}</>
-    ) : content.branding.logoText;
+    return (
+      <span className="font-serif text-2xl tracking-widest text-white">
+        {brandName}
+      </span>
+    );
   };
 
-  const renderMobileLogo = () => {
-    if (branding.logoMode === 'none') return null;
-    
-    if (branding.logoMode === 'image' && branding.mobileLogo) {
+  const renderLogoContent = () => {
+    if (logoMode === 'none') {
+      return null;
+    }
+
+    if (logoMode === 'image') {
+      const desktopLogo = branding.primaryLogo;
+      const mobileLogo = branding.mobileLogo || branding.primaryLogo;
+
+      if (!desktopLogo && !mobileLogo) {
+        return renderTextLogo();
+      }
+
       return (
-        <MediaImage 
-          src={branding.mobileLogo} 
-          alt={content.branding.logoText} 
-          style={{ width: `${branding.mobileLogoWidth}px` }}
-          className="object-contain block md:hidden" 
-        />
+        <>
+          {/* Desktop Logo */}
+          {desktopLogo && (
+            <div className="hidden md:block">
+              <MediaImage
+                src={desktopLogo}
+                alt={brandName}
+                style={{ width: `${branding.logoWidth || 140}px` }}
+                className="object-contain max-h-12"
+              />
+            </div>
+          )}
+          {/* Mobile Logo: falls back to desktop logo if mobile specific logo isn't set */}
+          {mobileLogo && (
+            <div className="md:hidden block">
+              <MediaImage
+                src={mobileLogo}
+                alt={brandName}
+                style={{ width: `${branding.mobileLogoWidth || 80}px` }}
+                className="object-contain max-h-10"
+              />
+            </div>
+          )}
+        </>
       );
     }
-    
-    // Splitting logic for VXN style text logo
-    return content.branding.logoText.length > 2 ? (
-      <>{content.branding.logoText.slice(0, 1)}<span className="text-cinema-red">{content.branding.logoText.slice(1, 2)}</span>{content.branding.logoText.slice(2)}</>
-    ) : content.branding.logoText;
+
+    if (logoMode === 'mark') {
+      const markIcon = branding.mobileLogo || branding.primaryLogo;
+      return (
+        <div className="flex items-center gap-3">
+          {markIcon && (
+            <MediaImage
+              src={markIcon}
+              alt="Logo Mark"
+              style={{ width: `${Math.min(branding.logoWidth || 36, 40)}px` }}
+              className="object-contain h-7"
+            />
+          )}
+          {renderTextLogo()}
+        </div>
+      );
+    }
+
+    // Default: 'text' mode
+    return renderTextLogo();
   };
 
   return (
@@ -88,27 +131,27 @@ export default function Navigation() {
         aria-label="Main Navigation"
       >
         <div className="max-w-[1600px] mx-auto px-6 md:px-12 flex justify-between items-center">
-          <Link 
-            to="/" 
-            className="font-serif text-2xl tracking-widest text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cinema-red focus-visible:ring-offset-4 focus-visible:ring-offset-cinema-dark rounded"
-            aria-label={`${content.branding.logoText} Home`}
-          >
-            {branding.logoMode === 'image' ? (
-              <>
-                {branding.primaryLogo && (
-                  <div className="hidden md:block">
-                    <MediaImage src={branding.primaryLogo} alt="Logo" style={{ width: `${branding.logoWidth}px` }} className="object-contain" />
-                  </div>
-                )}
-                {branding.mobileLogo && (
-                  <div className="md:hidden block">
-                    <MediaImage src={branding.mobileLogo} alt="Logo" style={{ width: `${branding.mobileLogoWidth}px` }} className="object-contain" />
-                  </div>
-                )}
-                {(!branding.primaryLogo && !branding.mobileLogo) && renderLogo()}
-              </>
-            ) : renderLogo()}
-          </Link>
+          
+          {/* Brand Logo & Quick Edit Trigger */}
+          <div className="relative group flex items-center">
+            <Link 
+              to="/" 
+              className="focus:outline-none focus-visible:ring-2 focus-visible:ring-cinema-red focus-visible:ring-offset-4 focus-visible:ring-offset-cinema-dark rounded flex items-center"
+              aria-label={`${brandName} Home`}
+            >
+              {renderLogoContent()}
+            </Link>
+
+            {/* Subtle edit logo hover icon for admins/owners */}
+            <Link
+              to="/admin/branding"
+              className="opacity-0 group-hover:opacity-100 transition-opacity ml-2 p-1.5 bg-gray-900/90 border border-gray-700/80 rounded-full text-gray-400 hover:text-cinema-red hover:border-cinema-red hidden md:flex items-center"
+              title="Change Website Logo & Branding"
+              aria-label="Edit Website Logo"
+            >
+              <Brush className="w-3 h-3" />
+            </Link>
+          </div>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex gap-10 items-center">
@@ -125,6 +168,16 @@ export default function Navigation() {
                 {link.label}
               </Link>
             ))}
+
+            {/* Quick Link to Logo & Admin Settings */}
+            <Link
+              to="/admin/branding"
+              className="ml-2 flex items-center gap-1.5 px-3 py-1.5 bg-gray-900/60 hover:bg-gray-800 border border-gray-800 hover:border-cinema-red/50 text-gray-400 hover:text-white rounded-md text-[11px] uppercase tracking-wider font-medium transition-all"
+              title="Customize Logo & Site Branding"
+            >
+              <Brush className="w-3 h-3 text-cinema-red" />
+              <span>Edit Logo</span>
+            </Link>
           </div>
 
           {/* Mobile Nav Toggle */}
@@ -149,7 +202,14 @@ export default function Navigation() {
             transition={{ type: 'tween', duration: 0.4 }}
             className="fixed inset-0 z-[60] bg-cinema-black flex flex-col"
           >
-            <div className="p-6 flex justify-end">
+            <div className="p-6 flex justify-between items-center border-b border-gray-900">
+              <Link
+                to="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center"
+              >
+                {renderLogoContent()}
+              </Link>
               <button 
                 onClick={() => setMobileMenuOpen(false)}
                 className="text-white hover:text-cinema-red transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-cinema-red rounded p-1"
@@ -158,6 +218,7 @@ export default function Navigation() {
                 <X className="w-8 h-8" />
               </button>
             </div>
+            
             <div className="flex-1 flex flex-col items-center justify-center gap-8">
               {navLinks.map((link, i) => (
                 <motion.div
@@ -177,6 +238,22 @@ export default function Navigation() {
                   </Link>
                 </motion.div>
               ))}
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: navLinks.length * 0.1 + 0.2 }}
+                className="pt-6 border-t border-gray-800 w-48 text-center"
+              >
+                <Link
+                  to="/admin/branding"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-2 py-2.5 px-4 bg-gray-900 border border-gray-700 rounded-lg text-xs font-bold uppercase tracking-wider text-white hover:border-cinema-red transition-colors"
+                >
+                  <Brush className="w-4 h-4 text-cinema-red" />
+                  <span>Change Logo / Admin</span>
+                </Link>
+              </motion.div>
             </div>
           </motion.div>
         )}

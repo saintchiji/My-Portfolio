@@ -16,6 +16,12 @@ export interface NavLink {
   order: number;
 }
 
+export interface CategoryItem {
+  id: string;
+  name: string;
+  isVisible: boolean;
+  order: number;
+}
 export interface ServiceItem {
   id: string;
   title: string;
@@ -54,6 +60,7 @@ export interface SiteContent {
     capabilities: { id: string; title: string; description: string }[];
     approach: { id: string; step: string; title: string; desc: string }[];
   };
+  categories?: CategoryItem[];
   services: ServiceItem[];
   servicesPage: {
     headline: string;
@@ -111,6 +118,14 @@ const initialContent: SiteContent = {
     headline: 'SERVICES',
     description: 'Visual production, cinematography and editing built around stories worth watching.'
   },
+  categories: [
+    { id: 'cat-1', name: 'Commercial', isVisible: true, order: 0 },
+    { id: 'cat-2', name: 'Short Film', isVisible: true, order: 1 },
+    { id: 'cat-3', name: 'Music Video', isVisible: true, order: 2 },
+    { id: 'cat-4', name: 'Documentary', isVisible: true, order: 3 },
+    { id: 'cat-5', name: 'Fashion', isVisible: true, order: 4 },
+    { id: 'cat-6', name: 'Wedding', isVisible: true, order: 5 }
+  ],
   services: [
     {
       id: 'srv-1',

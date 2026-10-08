@@ -1,5 +1,5 @@
-import { motion } from 'motion/react';
-import { Mail, Instagram, Twitter, Video, Youtube, Linkedin, Facebook } from 'lucide-react';
+import { Mail, Instagram, Twitter, Video, Youtube, Linkedin, Facebook, Lock, Brush } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useContent } from '../context/ContentContext';
 import { useBranding } from '../context/BrandingContext';
 import MediaImage from './MediaImage';
@@ -17,6 +17,8 @@ export default function Footer() {
   const { content } = useContent();
   const { branding } = useBranding();
   const socialLinks = content.socialLinks.filter(l => l.isVisible);
+  const brandName = branding.logoMark || content.branding?.logoText || 'VXN';
+  const footerLogoSrc = branding.footerLogo || branding.primaryLogo;
 
   return (
     <footer className="border-t border-cinema-red/10 bg-cinema-black text-gray-400" id="contact">
@@ -60,17 +62,28 @@ export default function Footer() {
         
         <div className="mt-24 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs tracking-widest uppercase">
           <div className="flex items-center gap-4">
-            {(branding.logoMode === 'image' && branding.footerLogo) ? (
+            {(branding.logoMode === 'image' && footerLogoSrc) ? (
               <MediaImage 
-                src={branding.footerLogo} 
-                alt="Footer Logo" 
-                style={{ width: `${branding.footerLogoWidth}px` }}
-                className="object-contain" 
+                src={footerLogoSrc} 
+                alt={`${brandName} Footer Logo`} 
+                style={{ width: `${branding.footerLogoWidth || 100}px` }}
+                className="object-contain max-h-8" 
               />
             ) : null}
-            <p>&copy; {new Date().getFullYear()} {content.branding.logoText}.</p>
+            <p>&copy; {new Date().getFullYear()} {brandName}.</p>
           </div>
-          <p>All Rights Reserved.</p>
+          
+          <div className="flex items-center gap-6">
+            <p>All Rights Reserved.</p>
+            <Link 
+              to="/admin/branding" 
+              className="inline-flex items-center gap-1.5 text-gray-500 hover:text-cinema-red transition-colors font-medium normal-case"
+              title="Change Website Logo & Branding"
+            >
+              <Brush className="w-3.5 h-3.5 text-cinema-red" />
+              <span className="text-[11px] font-sans tracking-normal underline underline-offset-2">Change Logo / Admin</span>
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

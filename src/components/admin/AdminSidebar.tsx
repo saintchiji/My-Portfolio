@@ -8,7 +8,13 @@ import {
   LogOut,
   X,
   Menu as MenuIcon,
-  MessageSquare
+  MessageSquare,
+  Tags,
+  Briefcase,
+  Brush,
+  Palette,
+  Navigation as NavigationIcon,
+  Share2
 } from 'lucide-react';
 
 export default function AdminSidebar() {
@@ -18,8 +24,13 @@ export default function AdminSidebar() {
     { name: 'Dashboard', path: '/admin', icon: LayoutDashboard },
     { name: 'Projects', path: '/admin/projects', icon: Film },
     { name: 'Page Builder', path: '/admin/pages', icon: Layers },
-    { name: 'Inquiries', path: '/admin/inquiries', icon: MessageSquare },
-    { name: 'Settings', path: '/admin/settings', icon: Settings },
+    { name: 'Categories', path: '/admin/categories', icon: Tags },
+    { name: 'Services', path: '/admin/services', icon: Briefcase },
+    { name: 'Logo & Branding', path: '/admin/branding', icon: Brush },
+    { name: 'Theme', path: '/admin/theme', icon: Palette },
+    { name: 'Navigation', path: '/admin/navigation', icon: NavigationIcon },
+    { name: 'Social Media', path: '/admin/social', icon: Share2 },
+    { name: 'Contact & Inquiries', path: '/admin/inquiries', icon: MessageSquare },
   ];
 
   return (
