@@ -23,6 +23,7 @@ interface DatabaseContextType {
   publish: () => Promise<void>;
   isPublishing: boolean;
   isAdmin: boolean;
+  isLoading: boolean;
 }
 
 const DatabaseContext = createContext<DatabaseContextType | undefined>(undefined);
@@ -137,16 +138,10 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // Do not render application until proper config is loaded
-  if (isAdmin && !isDraftLoaded) {
-    return (
-      <div className="min-h-screen bg-cinema-dark flex items-center justify-center">
-         <Loader2 className="w-8 h-8 text-cinema-red animate-spin" />
-      </div>
-    );
-  }
+  const isLoading = isAdmin ? !isDraftLoaded : !isPublishedLoaded;
 
-  if (!isAdmin && !isPublishedLoaded) {
+  // For Admin only: wait for draft config to load to prevent accidental overwrites
+  if (isAdmin && !isDraftLoaded) {
     return (
       <div className="min-h-screen bg-cinema-dark flex items-center justify-center">
          <Loader2 className="w-8 h-8 text-cinema-red animate-spin" />
@@ -163,7 +158,8 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
       hasUnsavedChanges,
       publish,
       isPublishing,
-      isAdmin
+      isAdmin,
+      isLoading
     }}>
       {children}
     </DatabaseContext.Provider>

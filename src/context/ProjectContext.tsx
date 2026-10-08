@@ -5,6 +5,7 @@ import { useDatabase } from './DatabaseContext';
 
 interface ProjectContextType {
   projects: Project[];
+  isLoading: boolean;
   addProject: (project: Omit<Project, 'id' | 'order'>) => void;
   updateProject: (id: string, updates: Partial<Project>) => void;
   deleteProject: (id: string) => void;
@@ -15,7 +16,7 @@ interface ProjectContextType {
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 
 export function ProjectProvider({ children }: { children: ReactNode }) {
-  const { activeConfig, updateDraft } = useDatabase();
+  const { activeConfig, updateDraft, isLoading } = useDatabase();
   
   // Use config from DB, or fallback to initial if waiting
   const projects = activeConfig?.projects || initialData;
@@ -60,6 +61,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
   return (
     <ProjectContext.Provider value={{
       projects,
+      isLoading,
       addProject,
       updateProject,
       deleteProject,

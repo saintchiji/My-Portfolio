@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import ProjectCard from './ProjectCard';
+import ProjectCardSkeleton from './ProjectCardSkeleton';
 import { useProjects } from '../context/ProjectContext';
 
 const FILTERS = ['All', 'Commercial', 'Short-form', 'Long-form', 'Cinematography', 'Video Editing'];
 
 export default function WorkGrid() {
   const [activeFilter, setActiveFilter] = useState('All');
-  const { projects } = useProjects();
+  const { projects, isLoading } = useProjects();
 
   const publishedProjects = projects
     .filter(p => p.published)
@@ -51,13 +52,21 @@ export default function WorkGrid() {
         </div>
       </div>
       
-      <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
-        <AnimatePresence mode="popLayout">
-          {filteredProjects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <ProjectCardSkeleton key={index} index={index} featured={index === 0} />
           ))}
-        </AnimatePresence>
-      </motion.div>
+        </div>
+      ) : (
+        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
+          <AnimatePresence mode="popLayout">
+            {filteredProjects.map((project, index) => (
+              <ProjectCard key={project.id} project={project} index={index} />
+            ))}
+          </AnimatePresence>
+        </motion.div>
+      )}
     </section>
   );
 }

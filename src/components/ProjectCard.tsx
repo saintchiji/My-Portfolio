@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Project, PortfolioLayout } from '../types';
 import { motion } from 'motion/react';
 import { useRef, useState } from 'react';
+import { Film } from 'lucide-react';
 import MediaImage from './MediaImage';
 import MediaVideo from './MediaVideo';
 
@@ -14,6 +15,7 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ project, index, layout = 'cinematic-grid', className = '' }: ProjectCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const handleMouseEnter = () => {
@@ -43,7 +45,12 @@ export default function ProjectCard({ project, index, layout = 'cinematic-grid',
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.8, delay: (index % 3) * 0.1 }}
-      className={`group relative overflow-hidden bg-cinema-black cursor-pointer rounded-sm ${gridSpan} ${className} focus-within:ring-2 focus-within:ring-cinema-red focus-within:ring-offset-4 focus-within:ring-offset-cinema-dark`}
+      whileHover={{ 
+        y: -6, 
+        scale: 1.018,
+        transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] }
+      }}
+      className={`group relative z-10 hover:z-20 overflow-hidden bg-cinema-black cursor-pointer rounded-sm border border-gray-800/80 hover:border-cinema-red/40 shadow-[0_10px_30px_rgba(0,0,0,0.6)] hover:shadow-[0_25px_50px_rgba(0,0,0,0.92),0_0_35px_rgba(229,9,20,0.15)] transition-[border-color,box-shadow] duration-500 ease-out ${gridSpan} ${className} focus-within:ring-2 focus-within:ring-cinema-red focus-within:ring-offset-4 focus-within:ring-offset-cinema-dark`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onFocus={handleMouseEnter}
@@ -57,8 +64,21 @@ export default function ProjectCard({ project, index, layout = 'cinematic-grid',
             src={project.imageUrl} 
             alt={`Thumbnail for ${project.title}`} 
             loading="lazy"
-            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105 ${isHovered && project.video.previewUrl ? 'opacity-0' : 'opacity-70 group-hover:opacity-100'} grayscale-[50%] group-hover:grayscale-0 z-10`}
+            onLoad={() => setIsImageLoaded(true)}
+            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105 ${
+              isHovered && project.video.previewUrl ? 'opacity-0' : isImageLoaded ? 'opacity-70 group-hover:opacity-100' : 'opacity-0'
+            } grayscale-[50%] group-hover:grayscale-0 z-10 transition-opacity duration-500`}
           />
+
+          {/* Skeleton placeholder while thumbnail image loads */}
+          {!isImageLoaded && (
+            <div className="absolute inset-0 z-15 bg-gradient-to-b from-gray-900/90 to-cinema-black flex items-center justify-center overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent animate-shimmer" />
+              <div className="w-10 h-10 rounded-full border border-gray-800/80 flex items-center justify-center opacity-40">
+                <Film className="w-5 h-5 text-gray-600 animate-pulse" />
+              </div>
+            </div>
+          )}
 
           {/* Hover Video Preview Layer */}
           {project.video.previewUrl && (

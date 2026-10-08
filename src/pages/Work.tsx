@@ -1,13 +1,27 @@
+import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import ProjectCard from '../components/ProjectCard';
+import ProjectCardSkeleton from '../components/ProjectCardSkeleton';
 import { useProjects } from '../context/ProjectContext';
 import { useSections } from '../context/SectionContext';
 
 export default function Work() {
   const { category } = useParams();
-  const { projects } = useProjects();
+  const { projects, isLoading: isProjectsLoading } = useProjects();
   const { sections } = useSections();
+  const [isCategoryTransitioning, setIsCategoryTransitioning] = useState(false);
+
+  // Trigger brief skeleton loading animation when category changes or on mount to dramatically enhance perceived performance
+  useEffect(() => {
+    setIsCategoryTransitioning(true);
+    const timer = setTimeout(() => {
+      setIsCategoryTransitioning(false);
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [category]);
+
+  const isLoading = isProjectsLoading || isCategoryTransitioning;
   
   // Find the Portfolio block to get category visibility settings
   const portfolioSection = sections.find(s => s.type === 'portfolio');
@@ -78,18 +92,49 @@ export default function Work() {
           })}
         </div>
 
-        {/* Projects Grid */}
-        {displayedProjects.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
-            {displayedProjects.map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} />
-            ))}
-          </div>
-        ) : (
-          <div className="py-24 text-center">
-            <p className="text-gray-500 text-lg">No projects found for this category.</p>
-          </div>
-        )}
+        {/* Projects Grid or Skeletons */}
+        <AnimatePresence mode="wait">
+          {isLoading ? (
+            <motion.div 
+              key="skeletons"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10"
+            >
+              {Array.from({ length: 6 }).map((_, index) => (
+                <ProjectCardSkeleton 
+                  key={`skeleton-${index}`} 
+                  index={index} 
+                  featured={index === 0} 
+                />
+              ))}
+            </motion.div>
+          ) : displayedProjects.length > 0 ? (
+            <motion.div 
+              key={`projects-${category || 'all'}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10"
+            >
+              {displayedProjects.map((project, index) => (
+                <ProjectCard key={project.id} project={project} index={index} />
+              ))}
+            </motion.div>
+          ) : (
+            <motion.div 
+              key="empty"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="py-24 text-center"
+            >
+              <p className="text-gray-500 text-lg">No projects found for this category.</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="mt-32 pt-12 border-t border-gray-800 flex flex-wrap gap-6 items-center justify-between">
           <p className="text-gray-400">Looking for something specific?</p>

@@ -95,3 +95,17 @@ body[data-button-style="ghost"] .btn-primary:hover {
   outline: 2px solid var(--accent-light-color);
   outline-offset: 4px;
 }
+
+/* Cinematic Shimmer Skeleton Animation */
+@keyframes cinematic-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+.animate-shimmer {
+  animation: cinematic-shimmer 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
