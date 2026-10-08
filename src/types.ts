@@ -36,8 +36,38 @@ export interface BrandingConfig {
   footerLogoWidth: number;
   logoHeightDesktop?: number;
   logoHeightMobile?: number;
+  brandAccentColor?: string;
+  brandAccentLight?: string;
 }
 
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  company?: string;
+  phone?: string;
+  avatarUrl?: string;
+  role: 'client' | 'admin' | 'collaborator';
+  savedProjects: string[]; // project IDs
+  createdAt: string;
+  lastActive: string;
+  notificationsEnabled: boolean;
+  status: 'active' | 'pending' | 'archived';
+}
+
+export interface ClientInquiry {
+  id: string;
+  userId: string;
+  userEmail: string;
+  userName: string;
+  projectType: string;
+  budget: string;
+  deadline: string;
+  description: string;
+  status: 'new' | 'in_review' | 'proposal_sent' | 'in_production' | 'completed';
+  createdAt: string;
+  notes?: string;
+}
 
 export interface Project {
   id: string;
@@ -103,4 +133,19 @@ export interface PageSection {
   description?: string;
   buttonText?: string;
   buttonLink?: string;
+  // Dedicated Hero Section management options:
+  mobileMediaUrl?: string;
+  mobileMediaType?: 'image' | 'video';
+  videoFallbackImage?: string;
+  overlayOpacity?: number; // 0 to 1
+  overlayColor?: 'cinema-dark' | 'cinema-black' | 'cinema-red-burn';
+  mediaPosition?: 'center' | 'top' | 'bottom';
+  textAlign?: 'center' | 'left' | 'right';
+  secondaryButtonText?: string;
+  secondaryButtonLink?: string;
+  showSubtitle?: boolean;
+  showPrimaryButton?: boolean;
+  showSecondaryButton?: boolean;
+  showScrollIndicator?: boolean;
+  headingSize?: 'default' | 'compact' | 'massive';
 }

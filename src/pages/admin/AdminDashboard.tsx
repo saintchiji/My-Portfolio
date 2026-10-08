@@ -3,7 +3,7 @@ import { useProjects } from '../../context/ProjectContext';
 import { useBranding } from '../../context/BrandingContext';
 import { useContent } from '../../context/ContentContext';
 import MediaImage from '../../components/MediaImage';
-import { Plus, Settings, Layers, MessageSquare, Clock, Brush, Eye } from 'lucide-react';
+import { Plus, Settings, Layers, MessageSquare, Clock, Brush, Eye, Tv, Users } from 'lucide-react';
 
 export default function AdminDashboard() {
   const { projects } = useProjects();
@@ -155,14 +155,36 @@ export default function AdminDashboard() {
           <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider">Quick Actions</h2>
           <div className="grid grid-cols-1 gap-3">
             
-            {/* Direct Logo & Branding Quick Action */}
-            <Link to="/admin/branding" className="flex items-center gap-4 p-4 bg-cinema-black border border-gray-800 hover:border-cinema-red rounded-lg hover:bg-gray-900 transition-colors group">
+            {/* Hero Section Quick Action */}
+            <Link to="/admin/hero" className="flex items-center gap-4 p-4 bg-cinema-black border border-gray-800 hover:border-cinema-red rounded-lg hover:bg-gray-900 transition-colors group">
               <div className="w-10 h-10 rounded-full bg-cinema-red/10 group-hover:bg-cinema-red flex items-center justify-center transition-colors">
-                <Brush className="w-5 h-5 text-cinema-red group-hover:text-white transition-colors" />
+                <Tv className="w-5 h-5 text-cinema-red group-hover:text-white transition-colors" />
               </div>
               <div>
-                <span className="text-sm font-bold text-white uppercase tracking-wider block">Change Logo & Branding</span>
-                <span className="text-xs text-gray-500">Header logo, mobile logo, brand name & sizing</span>
+                <span className="text-sm font-bold text-white uppercase tracking-wider block">Hero Section</span>
+                <span className="text-xs text-gray-500">Video background, typography, CTA buttons</span>
+              </div>
+            </Link>
+
+            {/* Direct Logo & Branding Quick Action */}
+            <Link to="/admin/branding" className="flex items-center gap-4 p-4 bg-cinema-black border border-gray-800 hover:border-cinema-red rounded-lg hover:bg-gray-900 transition-colors group">
+              <div className="w-10 h-10 rounded-full bg-gray-900 group-hover:bg-cinema-red/10 flex items-center justify-center transition-colors">
+                <Brush className="w-5 h-5 text-gray-400 group-hover:text-cinema-red transition-colors" />
+              </div>
+              <div>
+                <span className="text-sm font-bold text-white uppercase tracking-wider block">Website Branding</span>
+                <span className="text-xs text-gray-500">Header logo, mobile logo, favicon & colors</span>
+              </div>
+            </Link>
+
+            {/* User Management Quick Action */}
+            <Link to="/admin/users" className="flex items-center gap-4 p-4 bg-cinema-black border border-gray-800 hover:border-cinema-red rounded-lg hover:bg-gray-900 transition-colors group">
+              <div className="w-10 h-10 rounded-full bg-gray-900 group-hover:bg-cinema-red/10 flex items-center justify-center transition-colors">
+                <Users className="w-5 h-5 text-gray-400 group-hover:text-cinema-red transition-colors" />
+              </div>
+              <div>
+                <span className="text-sm font-bold text-white uppercase tracking-wider block">User Management</span>
+                <span className="text-xs text-gray-500">Client accounts, moodboards, and permissions</span>
               </div>
             </Link>
 

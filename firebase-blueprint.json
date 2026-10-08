@@ -12,6 +12,8 @@
             "content": "object",
             "branding": "object",
             "media": "array",
+            "users": "array",
+            "inquiries": "array",
             "updatedAt": "timestamp"
           }
         },
@@ -24,6 +26,8 @@
             "content": "object",
             "branding": "object",
             "media": "array",
+            "users": "array",
+            "inquiries": "array",
             "updatedAt": "timestamp"
           }
         }

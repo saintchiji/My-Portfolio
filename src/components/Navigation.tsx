@@ -1,4 +1,4 @@
-import { Menu, X } from 'lucide-react';
+import { Menu, X, User } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link, useLocation } from 'react-router-dom';
@@ -156,6 +156,16 @@ export default function Navigation() {
                 {link.label}
               </Link>
             ))}
+
+            {/* Discreet Client Portal Access */}
+            <Link
+              to="/dashboard"
+              className="ml-2 uppercase tracking-widest text-[10px] font-bold text-gray-300 hover:text-white px-3 py-1.5 rounded border border-gray-800 hover:border-cinema-red transition-all flex items-center gap-1.5 bg-cinema-black/60"
+              title="Client Portal & Moodboard"
+            >
+              <User className="w-3.5 h-3.5 text-cinema-red" />
+              <span>Client Portal</span>
+            </Link>
           </div>
 
           {/* Mobile Nav Toggle */}
@@ -216,6 +226,21 @@ export default function Navigation() {
                   </Link>
                 </motion.div>
               ))}
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: (navLinks.length + 1) * 0.1 + 0.2 }}
+              >
+                <Link
+                  to="/dashboard"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="font-serif text-2xl text-cinema-red-light flex items-center gap-2 px-5 py-2 rounded-full border border-cinema-red/30 bg-cinema-red/10"
+                >
+                  <User className="w-5 h-5" />
+                  <span>Client Portal</span>
+                </Link>
+              </motion.div>
             </div>
           </motion.div>
         )}

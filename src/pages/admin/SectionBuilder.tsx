@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { useSections } from '../../context/SectionContext';
 import { PageSection } from '../../types';
-import { GripVertical, Eye, EyeOff, Copy, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
+import { GripVertical, Eye, EyeOff, Copy, Trash2, ChevronDown, ChevronUp, Tv, ArrowRight } from 'lucide-react';
 import MediaSelector from '../../components/admin/MediaSelector';
 import { useContent } from '../../context/ContentContext';
 
@@ -135,16 +136,37 @@ export default function SectionBuilder() {
                           </div>
 
                           {section.type === 'hero' && (
-                            <div className="pt-4 border-t border-gray-800">
-                              <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Hero Background Media</label>
-                              <MediaSelector
-                                type="any"
-                                value={section.mediaUrl || ''}
-                                onChange={(val, asset) => {
-                                  const mediaType = asset?.type === 'video' || val.includes('mp4') || val.includes('youtube') || val.includes('vimeo') ? 'video' : 'image';
-                                  updateSection(section.id, { mediaUrl: val, mediaType });
-                                }}
-                              />
+                            <div className="pt-4 border-t border-gray-800 space-y-4">
+                              <div className="bg-gray-950 p-4 rounded-lg border border-gray-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                                <div>
+                                  <p className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                                    <Tv className="w-3.5 h-3.5 text-cinema-red" />
+                                    Dedicated Hero Section Studio
+                                  </p>
+                                  <p className="text-[11px] text-gray-500 mt-0.5">
+                                    Configure background video/image, mobile media, fallback poster, text alignment, and buttons with interactive responsive preview.
+                                  </p>
+                                </div>
+                                <Link
+                                  to="/admin/hero"
+                                  className="btn-primary px-4 py-2 text-xs uppercase font-bold tracking-wider inline-flex items-center gap-1.5 whitespace-nowrap"
+                                >
+                                  <span>Open Hero Studio</span>
+                                  <ArrowRight className="w-3.5 h-3.5" />
+                                </Link>
+                              </div>
+
+                              <div>
+                                <label className="block text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">Quick Background Media</label>
+                                <MediaSelector
+                                  type="any"
+                                  value={section.mediaUrl || ''}
+                                  onChange={(val, asset) => {
+                                    const mediaType = asset?.type === 'video' || val.includes('mp4') || val.includes('youtube') || val.includes('vimeo') ? 'video' : 'image';
+                                    updateSection(section.id, { mediaUrl: val, mediaType });
+                                  }}
+                                />
+                              </div>
                             </div>
                           )}
 

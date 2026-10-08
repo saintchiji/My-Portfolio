@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { db, doc, setDoc, onSnapshot } from '../lib/firebase';
 import { useLocation } from 'react-router-dom';
-import { Project, PageSection, ThemeConfig, BrandingConfig, MediaAsset } from '../types';
+import { Project, PageSection, ThemeConfig, BrandingConfig, MediaAsset, UserProfile, ClientInquiry } from '../types';
 import { Loader2 } from 'lucide-react';
 
 export interface SiteConfiguration {
@@ -11,16 +11,20 @@ export interface SiteConfiguration {
   content: any | null;
   branding: BrandingConfig | null;
   media: MediaAsset[];
+  users?: UserProfile[];
+  inquiries?: ClientInquiry[];
   updatedAt?: string;
 }
 
 interface DatabaseContextType {
   activeConfig: SiteConfiguration | null;
   draftConfig: SiteConfiguration | null;
+  publishedConfig: SiteConfiguration | null;
   updateDraft: (key: keyof SiteConfiguration, data: any) => void;
   saveDraft: () => Promise<void>;
   hasUnsavedChanges: boolean;
   publish: () => Promise<void>;
+  restorePublished: () => Promise<void>;
   isPublishing: boolean;
   isAdmin: boolean;
   isLoading: boolean;
@@ -112,6 +116,30 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
     setHasUnsavedChanges(true);
   };
 
+  // Synchronize Favicon dynamically whenever branding changes
+  useEffect(() => {
+    const faviconUrl = activeConfig?.branding?.favicon;
+    if (faviconUrl) {
+      let link: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
+      if (!link) {
+        link = document.createElement('link');
+        link.type = 'image/x-icon';
+        link.rel = 'shortcut icon';
+        document.getElementsByTagName('head')[0].appendChild(link);
+      }
+      if (faviconUrl.startsWith('idb://')) {
+        import('../lib/indexeddb').then(({ getMediaBlobUrl }) => {
+          const blobId = faviconUrl.replace('idb://', '');
+          getMediaBlobUrl(blobId).then(blobUrl => {
+            if (blobUrl && link) link.href = blobUrl;
+          });
+        });
+      } else {
+        link.href = faviconUrl;
+      }
+    }
+  }, [activeConfig?.branding?.favicon]);
+
   const saveDraft = async () => {
     if (!draftConfig) return;
     try {
@@ -122,6 +150,17 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const restorePublished = async () => {
+    if (!publishedConfig) return;
+    try {
+      setDraftConfig(publishedConfig);
+      await setDoc(doc(db, 'site', 'draft'), publishedConfig);
+      setHasUnsavedChanges(false);
+    } catch (err) {
+      console.error('Failed to restore published config', err);
+    }
+  };
+
   const publish = async () => {
     if (!draftConfig) return;
     setIsPublishing(true);
@@ -129,6 +168,7 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
       const configToPublish = { ...draftConfig, updatedAt: new Date().toISOString() };
       await saveDraft();
       await setDoc(doc(db, 'site', 'published'), configToPublish);
+      setPublishedConfig(configToPublish);
       alert('Successfully published site configuration!');
     } catch (err) {
       console.error('Failed to publish', err);
@@ -153,8 +193,10 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
     <DatabaseContext.Provider value={{
       activeConfig,
       draftConfig,
+      publishedConfig,
       updateDraft,
       saveDraft,
+      restorePublished,
       hasUnsavedChanges,
       publish,
       isPublishing,

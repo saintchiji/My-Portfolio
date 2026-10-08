@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useMedia } from '../../context/MediaContext';
 import { Image as ImageIcon, Film, X, Upload } from 'lucide-react';
 import { MediaAsset } from '../../types';
+import MediaImage from '../MediaImage';
 
 interface MediaSelectorProps {
   type: 'image' | 'video' | 'any';
@@ -82,7 +83,7 @@ export default function MediaSelector({ type, value, onChange }: MediaSelectorPr
                   >
                     <div className="aspect-video bg-cinema-black relative flex items-center justify-center">
                       {(asset.type === 'image' || asset.type === 'logo') ? (
-                        <img src={asset.url.startsWith('idb://') ? '#' : asset.url} alt="" className="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity" />
+                        <MediaImage src={asset.url} alt={asset.name} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity" />
                       ) : (
                         <Film className="w-8 h-8 text-gray-700 group-hover:text-cinema-red transition-colors" />
                       )}
