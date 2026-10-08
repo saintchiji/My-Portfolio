@@ -13,7 +13,6 @@ import Contact from './pages/Contact';
 import ProjectDetail from './pages/ProjectDetail';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
-import WebsiteLogoCustomizer from './components/WebsiteLogoCustomizer';
 import { DatabaseProvider } from './context/DatabaseContext';
 import { ProjectProvider } from './context/ProjectContext';
 import { SectionProvider } from './context/SectionContext';
@@ -46,7 +45,6 @@ function MainLayout({ children }: { children: React.ReactNode }) {
         <Navigation />
         <main className="flex-grow">{children}</main>
         <Footer />
-        <WebsiteLogoCustomizer />
       </div>
     </div>
   );

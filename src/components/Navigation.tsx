@@ -1,4 +1,4 @@
-import { Menu, X, Brush } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link, useLocation } from 'react-router-dom';
@@ -84,7 +84,7 @@ export default function Navigation() {
               />
             </div>
           )}
-          {/* Mobile Logo: falls back to desktop logo if mobile specific logo isn't set */}
+          {/* Mobile Logo: gracefully falls back to desktop logo if mobile specific logo isn't set */}
           {mobileLogo && (
             <div className="md:hidden block">
               <MediaImage
@@ -132,26 +132,14 @@ export default function Navigation() {
       >
         <div className="max-w-[1600px] mx-auto px-6 md:px-12 flex justify-between items-center">
           
-          {/* Brand Logo & Quick Edit Trigger */}
-          <div className="relative group flex items-center">
-            <Link 
-              to="/" 
-              className="focus:outline-none focus-visible:ring-2 focus-visible:ring-cinema-red focus-visible:ring-offset-4 focus-visible:ring-offset-cinema-dark rounded flex items-center"
-              aria-label={`${brandName} Home`}
-            >
-              {renderLogoContent()}
-            </Link>
-
-            {/* Subtle edit logo hover icon for admins/owners */}
-            <Link
-              to="/admin/branding"
-              className="opacity-0 group-hover:opacity-100 transition-opacity ml-2 p-1.5 bg-gray-900/90 border border-gray-700/80 rounded-full text-gray-400 hover:text-cinema-red hover:border-cinema-red hidden md:flex items-center"
-              title="Change Website Logo & Branding"
-              aria-label="Edit Website Logo"
-            >
-              <Brush className="w-3 h-3" />
-            </Link>
-          </div>
+          {/* Brand Logo Link */}
+          <Link 
+            to="/" 
+            className="focus:outline-none focus-visible:ring-2 focus-visible:ring-cinema-red focus-visible:ring-offset-4 focus-visible:ring-offset-cinema-dark rounded flex items-center"
+            aria-label={`${brandName} Home`}
+          >
+            {renderLogoContent()}
+          </Link>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex gap-10 items-center">
@@ -168,16 +156,6 @@ export default function Navigation() {
                 {link.label}
               </Link>
             ))}
-
-            {/* Quick Link to Logo & Admin Settings */}
-            <Link
-              to="/admin/branding"
-              className="ml-2 flex items-center gap-1.5 px-3 py-1.5 bg-gray-900/60 hover:bg-gray-800 border border-gray-800 hover:border-cinema-red/50 text-gray-400 hover:text-white rounded-md text-[11px] uppercase tracking-wider font-medium transition-all"
-              title="Customize Logo & Site Branding"
-            >
-              <Brush className="w-3 h-3 text-cinema-red" />
-              <span>Edit Logo</span>
-            </Link>
           </div>
 
           {/* Mobile Nav Toggle */}
@@ -238,22 +216,6 @@ export default function Navigation() {
                   </Link>
                 </motion.div>
               ))}
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: navLinks.length * 0.1 + 0.2 }}
-                className="pt-6 border-t border-gray-800 w-48 text-center"
-              >
-                <Link
-                  to="/admin/branding"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center gap-2 py-2.5 px-4 bg-gray-900 border border-gray-700 rounded-lg text-xs font-bold uppercase tracking-wider text-white hover:border-cinema-red transition-colors"
-                >
-                  <Brush className="w-4 h-4 text-cinema-red" />
-                  <span>Change Logo / Admin</span>
-                </Link>
-              </motion.div>
             </div>
           </motion.div>
         )}

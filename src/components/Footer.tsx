@@ -1,5 +1,4 @@
-import { Mail, Instagram, Twitter, Video, Youtube, Linkedin, Facebook, Lock, Brush } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Mail, Instagram, Twitter, Video, Youtube, Linkedin, Facebook } from 'lucide-react';
 import { useContent } from '../context/ContentContext';
 import { useBranding } from '../context/BrandingContext';
 import MediaImage from './MediaImage';
@@ -73,17 +72,7 @@ export default function Footer() {
             <p>&copy; {new Date().getFullYear()} {brandName}.</p>
           </div>
           
-          <div className="flex items-center gap-6">
-            <p>All Rights Reserved.</p>
-            <Link 
-              to="/admin/branding" 
-              className="inline-flex items-center gap-1.5 text-gray-500 hover:text-cinema-red transition-colors font-medium normal-case"
-              title="Change Website Logo & Branding"
-            >
-              <Brush className="w-3.5 h-3.5 text-cinema-red" />
-              <span className="text-[11px] font-sans tracking-normal underline underline-offset-2">Change Logo / Admin</span>
-            </Link>
-          </div>
+          <p>All Rights Reserved.</p>
         </div>
       </div>
     </footer>
